@@ -153,7 +153,7 @@ Make sure to include ALL ${tasks.length} tasks in your response.`;
     }
 
     // Parse the response
-    let analysisResults;
+    let analysisResults: any;
     try {
       console.log('[prioritizeTasksV2] Raw OpenAI response:', response.substring(0, 500));
       const parsed = JSON.parse(response);

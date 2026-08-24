@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DOMPurify from "dompurify";
 import { useAuth } from "@/hooks/useAuth";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -923,10 +924,12 @@ export default function FoodisaurAgent() {
                                     Download
                                   </Button>
                                 </div>
-                                <div 
+                                <div
                                   id={`slide-${media.content.slideNumber}`}
                                   className="aspect-video"
-                                  dangerouslySetInnerHTML={{ __html: media.content.html }}
+                                  // AI-generated slide HTML — sanitize before injecting (XSS)
+                                  // biome-ignore lint/security/noDangerouslySetInnerHtml: sanitized with DOMPurify
+                                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(media.content.html) }}
                                 />
                               </div>
                             ) : media.type === 'audio' && media.content?.script ? (

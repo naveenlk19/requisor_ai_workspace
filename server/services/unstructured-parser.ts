@@ -113,6 +113,7 @@ function htmlTableToMarkdown(html: string): string {
 function normalizeRawElement(raw: any): UnstructuredElement | null {
   if (!raw || typeof raw !== "object") return null;
   const type = String(raw.type || "UncategorizedText");
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from Unstructured element text
   const text = String(raw.text || "").replace(/\x00/g, "");
   const page =
     raw.metadata && typeof raw.metadata.page_number === "number"

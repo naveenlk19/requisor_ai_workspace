@@ -122,7 +122,9 @@ export default function EnhancedTeamView() {
   const allSkills = useMemo(() => {
     const skills = new Set<string>();
     teamMembers.forEach(member => {
-      member.skills?.forEach(skill => skills.add(skill));
+      member.skills?.forEach(skill => {
+        skills.add(skill);
+      });
     });
     return Array.from(skills).sort();
   }, [teamMembers]);

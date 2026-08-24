@@ -76,6 +76,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
   return (
     <style
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: CSS custom properties built from developer-owned chart config, not user input (canonical shadcn pattern)
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(

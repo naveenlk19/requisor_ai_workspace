@@ -2622,7 +2622,9 @@ export default function MeetingsPage() {
       recordingTimerRef.current = null;
     }
     if (recordingStreamRef.current) {
-      recordingStreamRef.current.getTracks().forEach((t) => t.stop());
+      recordingStreamRef.current.getTracks().forEach((t) => {
+        t.stop();
+      });
       recordingStreamRef.current = null;
     }
   }, []);
@@ -2852,7 +2854,7 @@ export default function MeetingsPage() {
                         status?: string | null;
                       }> = [];
                       if (googleMeetMeetings) {
-                        googleMeetMeetings.forEach((m) =>
+                        googleMeetMeetings.forEach((m) => {
                           allMeetings.push({
                             id: m.id,
                             subject: m.subject,
@@ -2862,11 +2864,11 @@ export default function MeetingsPage() {
                             meetLink: m.meetLink,
                             attendees: m.attendees || [],
                             status: m.status,
-                          })
-                        );
+                          });
+                        });
                       }
                       if (teamsMeetings) {
-                        teamsMeetings.forEach((m) =>
+                        teamsMeetings.forEach((m) => {
                           allMeetings.push({
                             id: m.id,
                             subject: m.subject,
@@ -2876,11 +2878,11 @@ export default function MeetingsPage() {
                             joinUrl: m.joinUrl,
                             attendees: m.attendees || [],
                             status: m.status,
-                          })
-                        );
+                          });
+                        });
                       }
                       if (zoomMeetings) {
-                        zoomMeetings.forEach((m) =>
+                        zoomMeetings.forEach((m) => {
                           allMeetings.push({
                             id: m.id,
                             subject: m.subject,
@@ -2890,8 +2892,8 @@ export default function MeetingsPage() {
                             joinUrl: m.joinUrl,
                             attendees: m.attendees || [],
                             status: m.status,
-                          })
-                        );
+                          });
+                        });
                       }
                       allMeetings.sort(
                         (a, b) =>

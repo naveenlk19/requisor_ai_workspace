@@ -873,7 +873,9 @@ export default function AgilePlanningPage() {
                               });
                             });
 
-                            epicMap.forEach((epic) => epics.push(epic));
+                            epicMap.forEach((epic) => {
+                              epics.push(epic);
+                            });
 
                             // Create agile plan format
                             const plan: AgilePlan = {

@@ -3567,7 +3567,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       };
 
       // Apply schema validation
-      let validatedProjectData;
+      let validatedProjectData: any;
       try {
         validatedProjectData = insertProjectSchema.parse(projectData);
       } catch (zodError) {
@@ -4610,7 +4610,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       );
 
       // Apply schema validation
-      let taskData;
+      let taskData: any;
       try {
         taskData = insertTaskSchema.parse(fixedRequestBody);
         console.log("Task data validated successfully");
@@ -5492,7 +5492,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       });
 
       // Build context with user's data
-      let projects, allTasks;
+      let projects: any, allTasks: any;
 
       if (userId !== "demo-user-123") {
         // Get user-specific data
@@ -5989,7 +5989,7 @@ export async function registerRoutes(app: Express): Promise<void> {
         userId = req.user.dbUserId || req.user.claims?.sub || "demo-user-123";
       }
 
-      let result;
+      let result: any;
 
       switch (action.type) {
         case "task_created":
@@ -6437,7 +6437,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       }
 
       // Redirect to main action execution logic
-      let result;
+      let result: any;
       switch (action.type) {
         case "task_created":
         case "task_updated":
@@ -12386,7 +12386,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
           projectId,
         );
 
-        let preferences;
+        let preferences: any;
         if (existing) {
           preferences = await storage.updatePriorityWeightingPreference(
             existing.id,
@@ -14232,16 +14232,16 @@ Respond with actionable insights and specific recommendations. Include assignmen
           const allOrigins = new Set<string>();
           for (const ev of relatedEvidence) {
             if (Array.isArray(ev.metadata?.mentionSources)) {
-              ev.metadata.mentionSources.forEach((s: string) =>
-                allSources.add(s),
-              );
+              ev.metadata.mentionSources.forEach((s: string) => {
+                allSources.add(s);
+              });
             } else if (ev.source) {
               allSources.add(ev.source);
             }
             if (Array.isArray(ev.metadata?.mentionOrigins)) {
-              ev.metadata.mentionOrigins.forEach((o: string) =>
-                allOrigins.add(o),
-              );
+              ev.metadata.mentionOrigins.forEach((o: string) => {
+                allOrigins.add(o);
+              });
             } else {
               allOrigins.add(`${ev.source || "unknown"}_original_${ev.id}`);
             }
@@ -15474,9 +15474,10 @@ User request: ${message}`,
     const sections = new Map<string, string>();
     const featurePattern =
       /##\s*Recommended Feature:\s*(.+?)\n([\s\S]*?)(?=##\s*Recommended Feature:|```json|$)/gi;
-    let match;
-    while ((match = featurePattern.exec(text)) !== null) {
+    let match = featurePattern.exec(text);
+    while (match !== null) {
       sections.set(match[1].trim().toLowerCase(), match[2]);
+      match = featurePattern.exec(text);
     }
     return sections;
   }
@@ -15490,21 +15491,23 @@ User request: ${message}`,
       supporting_quotes: string[];
     }> = [];
     const insightPattern = /###\s*Insight:\s*(.+?)\n([\s\S]*?)(?=###|##|$)/gi;
-    let match;
-    while ((match = insightPattern.exec(sectionText)) !== null) {
+    let match = insightPattern.exec(sectionText);
+    while (match !== null) {
       const theme = match[1].trim();
       const body = match[2];
       const rootCauseMatch = body.match(/\*\*Root cause:\*\*\s*(.+?)(?:\n|$)/i);
       const root_cause = rootCauseMatch ? rootCauseMatch[1].trim() : "";
       const supporting_quotes: string[] = [];
       const quotePattern = /-\s*"([^"]+)"/g;
-      let qm;
-      while ((qm = quotePattern.exec(body)) !== null) {
+      let qm = quotePattern.exec(body);
+      while (qm !== null) {
         supporting_quotes.push(qm[1]);
+        qm = quotePattern.exec(body);
       }
       if (theme && (root_cause || supporting_quotes.length > 0)) {
         insights.push({ theme, root_cause, supporting_quotes });
       }
+      match = insightPattern.exec(sectionText);
     }
     return insights;
   }
@@ -18399,6 +18402,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
           req.query?.preserveStructure === "true";
         const cleanTranscript = maybeParseSrt(transcript, {
           preserveStructure: keepStructure,
+          // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from pasted transcript before Postgres storage
         }).replace(/\x00/g, "");
         const updated = await storage.updateTeamsMeeting(meetingId, {
           transcript: cleanTranscript,
@@ -18482,7 +18486,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
 
         const aiData = await aiRes.json();
         const planText = aiData.choices?.[0]?.message?.content;
-        let plan;
+        let plan: any;
         try {
           plan = JSON.parse(planText);
         } catch {
@@ -19077,6 +19081,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
             .json({ error: "Transcript content is required" });
         }
 
+        // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from meeting transcript before Postgres storage
         const cleanTranscript = transcript.replace(/\x00/g, "");
         const updated = await storage.updateGoogleMeetMeeting(meetingId, {
           transcript: cleanTranscript,
@@ -19673,6 +19678,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
                 "No transcript available. Make sure cloud recording and audio transcript are enabled in your Zoom settings, and the meeting has ended.",
             });
         }
+        // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from Zoom transcript before Postgres storage
         const cleanTranscript = rawTranscript.replace(/\x00/g, "");
 
         const updated = await storage.updateZoomMeeting(meetingId, {
@@ -19715,6 +19721,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         if (!transcript || typeof transcript !== "string") {
           return res.status(400).json({ error: "Transcript text is required" });
         }
+        // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from pasted transcript before Postgres storage
         const cleanTranscript = transcript.replace(/\x00/g, "");
         const updated = await storage.updateZoomMeeting(meetingId, {
           transcript: cleanTranscript,
@@ -22032,7 +22039,7 @@ Be specific and reference actual data points. Use percentages and comparisons wh
           originId: `usage_import_${Date.now()}`,
         });
 
-        let evidenceItem;
+        let evidenceItem: any;
         if (match) {
           evidenceItem = match;
         } else {

@@ -310,6 +310,7 @@ async function fetchGoogleDocContent(accessToken: string, documentId: string): P
     }
     const text = await response.text();
     console.log(`[Google Meet Transcript] fetchGoogleDocContent: Export SUCCESS — ${text.length} chars`);
+    // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from exported Google Doc text
     return text.replace(/\x00/g, "").trim();
   }
 
@@ -329,6 +330,7 @@ async function fetchGoogleDocContent(accessToken: string, documentId: string): P
       const arrayBuffer = await dlResponse.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
       const result = await mammoth.extractRawText({ buffer });
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from Word doc transcript text
       const text = result.value.replace(/\x00/g, "").trim();
       console.log(`[Google Meet Transcript] fetchGoogleDocContent: Word doc parsed SUCCESS — ${text.length} chars`);
       return text;
@@ -357,6 +359,7 @@ async function fetchGoogleDocContent(accessToken: string, documentId: string): P
       const arrayBuffer = await dlResponse.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
       const result = await mammoth.extractRawText({ buffer });
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from Word doc transcript text
       const text = result.value.replace(/\x00/g, "").trim();
       console.log(`[Google Meet Transcript] fetchGoogleDocContent: Fallback mammoth parse SUCCESS — ${text.length} chars`);
       return text;
@@ -367,6 +370,7 @@ async function fetchGoogleDocContent(accessToken: string, documentId: string): P
 
   const text = await dlResponse.text();
   console.log(`[Google Meet Transcript] fetchGoogleDocContent: Raw text download — ${text.length} chars`);
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from downloaded file text
   return text.replace(/\x00/g, "").trim();
 }
 
@@ -847,6 +851,7 @@ export async function getTranscriptContent(accessToken: string, fileId: string, 
     });
     if (response.ok) {
       const text = await response.text();
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from exported transcript text
       const clean = text.replace(/\x00/g, "").trim();
       if (clean.length > 0) return clean;
     }
@@ -867,6 +872,7 @@ export async function getTranscriptContent(accessToken: string, fileId: string, 
       const arrayBuffer = await response.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
       const result = await mammoth.extractRawText({ buffer });
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from Word doc transcript text
       return result.value.replace(/\x00/g, "").trim();
     } catch (err: any) {
       console.log(`[Google Meet] mammoth parse failed for ${fileId}:`, err.message);
@@ -875,6 +881,7 @@ export async function getTranscriptContent(accessToken: string, fileId: string, 
   }
 
   const text = await response.text();
+  // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from downloaded transcript text
   const clean = text.replace(/\x00/g, "").trim();
 
   const binaryCheck = clean.substring(0, 100);
@@ -887,6 +894,7 @@ export async function getTranscriptContent(accessToken: string, fileId: string, 
       const arrayBuffer = await reDownload.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
       const result = await mammoth.extractRawText({ buffer });
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from Word doc transcript text
       return result.value.replace(/\x00/g, "").trim();
     } catch (err: any) {
       console.log(`[Google Meet] Fallback mammoth parse failed for ${fileId}:`, err.message);

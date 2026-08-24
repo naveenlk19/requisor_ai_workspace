@@ -255,6 +255,7 @@ This CSV contains structured data that may represent project requirements, resou
           const pdfParse = (await import("pdf-parse-new")).default;
           const dataBuffer = await fs.readFile(filePath);
           const pdfData = await pdfParse(dataBuffer);
+          // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from PDF-extracted text
           fastText = (pdfData.text || "").replace(/\x00/g, "");
           console.log("Successfully parsed PDF (fast):", file.originalname);
         } catch (pdfError) {
@@ -317,6 +318,7 @@ This CSV contains structured data that may represent project requirements, resou
           const mammoth = (await import("mammoth")).default;
           const dataBuffer = await fs.readFile(filePath);
           const result = await mammoth.extractRawText({ buffer: dataBuffer });
+          // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from Word-extracted text
           fastText = (result.value || "").replace(/\x00/g, "");
           console.log("Successfully parsed Word document (fast):", file.originalname);
         } catch (docError) {

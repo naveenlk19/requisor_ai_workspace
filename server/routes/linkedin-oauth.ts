@@ -96,8 +96,8 @@ router.get("/linkedin/callback", async (req: any, res) => {
 
         console.log(`[LinkedIn OAuth] Exchanging code for access token`);
 
-        let accessToken;
-        let expiresIn;
+        let accessToken: any;
+        let expiresIn: any;
 
         try {
             const tokenResponse = await axios.post(tokenUrl, params, {
@@ -118,7 +118,7 @@ router.get("/linkedin/callback", async (req: any, res) => {
         const profileUrl = "https://api.linkedin.com/v2/userinfo";
 
         console.log(`[LinkedIn OAuth] Fetching user profile`);
-        let profile;
+        let profile: any;
 
         try {
             const profileResponse = await axios.get(profileUrl, {

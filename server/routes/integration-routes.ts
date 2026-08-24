@@ -57,7 +57,7 @@ router.post("/linear/connect", isAuthenticated, async (req: any, res) => {
 
     const additionalData = { teams };
 
-    let integration;
+    let integration: any;
     if (existing) {
       integration = await storage.updateIntegration(existing.id, {
         isConnected: true,

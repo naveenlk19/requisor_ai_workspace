@@ -143,7 +143,7 @@ const availableFunctions: Record<string, Function> = {
             for (const platform of platforms) {
                 try {
                     const p = platform.toLowerCase();
-                    let result;
+                    let result: any;
 
                     if (p === "facebook") {
                         result = await socialMediaService.publishToFacebook(userId, args.content);
@@ -477,7 +477,7 @@ ${relevantMemories.map(m => `- ${m.content}`).join('\n')}
             }
         ];
 
-        let response;
+        let response: any;
         let attempt = 0;
         const MAX_RETRIES = 3;
         const currentContents = [...contents];

@@ -509,7 +509,9 @@ export function ProjectPlannerAgentV2() {
 
     try {
       const formData = new FormData();
-      files.forEach((file) => formData.append("files", file));
+      files.forEach((file) => {
+        formData.append("files", file);
+      });
 
       const response = await fetch("/api/ai/process-files", {
         method: "POST",
@@ -606,7 +608,9 @@ export function ProjectPlannerAgentV2() {
       });
       return "";
     } finally {
-      ids.forEach((id) => pendingFilesRef.current.delete(id));
+      ids.forEach((id) => {
+        pendingFilesRef.current.delete(id);
+      });
       setIsProcessingFiles(false);
     }
   };

@@ -217,7 +217,7 @@ router.post("/meetings/:id/fetch-transcript", async (req: any, res) => {
       });
     }
 
-    let transcripts;
+    let transcripts: any;
     try {
       transcripts = await teamsService.getMeetingTranscripts(token, meeting.meetingId);
     } catch (apiErr: any) {

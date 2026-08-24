@@ -771,7 +771,9 @@ export default function PastDiscoveriesPage() {
         }
       }
       if (group.length > 1) {
-        group.forEach((g) => used.add(g.id));
+        group.forEach((g) => {
+          used.add(g.id);
+        });
         groups.push(group);
       }
     }

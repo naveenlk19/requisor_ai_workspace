@@ -149,7 +149,7 @@ export async function checkResponseQuality(
     const controller = new AbortController();
     const timeoutMs = getTimeoutMs();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
-    let resp;
+    let resp: any;
     try {
       resp = await openai.chat.completions.create(
         {

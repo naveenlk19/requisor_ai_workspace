@@ -10,7 +10,8 @@
       "!**/dist",
       "!vendor",
       "!graphify-out",
-      "!attached_assets"
+      "!attached_assets",
+      "!**/*.css"
     ]
   },
   "linter": {

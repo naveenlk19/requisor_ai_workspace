@@ -296,7 +296,7 @@ export class CronScheduler {
       }
 
       // Publish to platform
-      let publishResult;
+      let publishResult: any;
       switch (scheduledPost.platform.toLowerCase()) {
         case "mastodon":
           publishResult = await this.publishToMastodonScheduled(

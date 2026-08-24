@@ -61,7 +61,11 @@ export default function BrainHubPage() {
   const goToTab = (next: TabValue, extra?: Record<string, string>) => {
     const params = new URLSearchParams();
     if (next !== "insights") params.set("tab", next);
-    if (extra) Object.entries(extra).forEach(([k, v]) => params.set(k, v));
+    if (extra) {
+      Object.entries(extra).forEach(([k, v]) => {
+        params.set(k, v);
+      });
+    }
     const qs = params.toString();
     setLocation(qs ? `/brain?${qs}` : "/brain");
   };

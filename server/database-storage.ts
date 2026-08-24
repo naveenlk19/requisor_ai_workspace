@@ -1443,6 +1443,7 @@ export class DatabaseStorage implements IStorage {
     metadata?: any,
   ): Promise<void> {
     // Sanitize content to remove null bytes (0x00) which PostgreSQL doesn't accept
+    // biome-ignore lint/suspicious/noControlCharactersInRegex: intentionally stripping control characters (null bytes) from chat message content before Postgres insert
     const sanitizedContent = content.replace(/\x00/g, '');
     
     await db.insert(chatMessages).values({

@@ -394,9 +394,9 @@ export function EnhancedTaskList({
   const toggleAllVisible = (checked: boolean) =>
     setSelectedIds((prev) => {
       const next = new Set(prev);
-      checked
-        ? visibleIds.forEach((id) => next.add(id))
-        : visibleIds.forEach((id) => next.delete(id));
+      visibleIds.forEach((id) => {
+        checked ? next.add(id) : next.delete(id);
+      });
       return next;
     });
 

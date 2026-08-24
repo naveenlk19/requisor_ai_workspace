@@ -253,7 +253,7 @@ export default function PrioritisorAgent() {
   const filteredAndSortedTasks = tasks
     .filter(task => filterStatus === 'all' || task.status === filterStatus)
     .sort((a, b) => {
-      let aValue, bValue;
+      let aValue: any, bValue: any;
       
       switch (sortBy) {
         case 'priorityScore':

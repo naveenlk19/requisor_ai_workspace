@@ -25,7 +25,9 @@ export function FormResponsesDialog({ form, onClose }: FormResponsesDialogProps)
     const allKeys = new Set<string>();
     submissions.forEach((submission: FormSubmission) => {
       if (submission.responseData && typeof submission.responseData === 'object') {
-        Object.keys(submission.responseData).forEach(key => allKeys.add(key));
+        Object.keys(submission.responseData).forEach(key => {
+          allKeys.add(key);
+        });
       }
     });
 
