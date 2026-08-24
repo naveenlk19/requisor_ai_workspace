@@ -8,15 +8,21 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-// Ensure SSL is enabled for secure connections; sslmode=disable opts out (local Postgres)
+// TLS handling. node-postgres assigns values PARSED FROM THE URL over the
+// explicit config object, so an `sslmode=` in the connection string silently
+// overrides our `ssl` option (with sslmode=require that re-enables strict
+// verification and breaks providers with self-signed certs, e.g. Render).
+// Therefore: strip sslmode from the URL and let the explicit `ssl` option be
+// the single source of truth. sslmode=disable opts out (local Postgres).
 const databaseUrl = process.env.DATABASE_URL;
-const sslDisabled = databaseUrl.includes('sslmode=disable');
-const sslEnabledUrl = databaseUrl.includes('sslmode=')
-  ? databaseUrl
-  : `${databaseUrl}${databaseUrl.includes('?') ? '&' : '?'}sslmode=require`;
+const [baseUrl, queryString] = databaseUrl.split('?');
+const params = (queryString ?? '').split('&').filter(Boolean);
+const sslDisabled = params.some(p => p === 'sslmode=disable');
+const keptParams = params.filter(p => !p.startsWith('sslmode='));
+const cleanUrl = keptParams.length ? `${baseUrl}?${keptParams.join('&')}` : baseUrl;
 
 export const pool = new Pool({
-  connectionString: sslEnabledUrl,
+  connectionString: cleanUrl,
   ssl: sslDisabled ? false : {
     rejectUnauthorized: false // Allow self-signed certificates for cloud providers
   },
