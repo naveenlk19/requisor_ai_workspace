@@ -1,0 +1,28 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
+  "files": {
+    "includes": [
+      "client/src/**",
+      "server/**",
+      "shared/**",
+      "scripts/**",
+      "!**/node_modules",
+      "!**/dist",
+      "!vendor",
+      "!graphify-out",
+      "!attached_assets"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "formatter": {
+    "enabled": false
+  },
+  "assist": {
+    "enabled": false
+  }
+}
