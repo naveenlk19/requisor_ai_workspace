@@ -2,8 +2,6 @@ import { db } from "../db";
 import { projects, tasks, projectMembers } from "@shared/schema";
 import { eq, and, gte, lte, isNull, desc, asc } from "drizzle-orm";
 import {
-  startOfWeek,
-  endOfWeek,
   startOfMonth,
   endOfMonth,
   addDays,

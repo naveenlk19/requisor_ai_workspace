@@ -905,7 +905,7 @@ export async function importCalendarMeetings(accessToken: string, daysBack: numb
   console.log(`[Google Meet] Importing calendar events from ${timeMin} to ${timeMax}`);
 
   const meetEvents: GoogleMeetEvent[] = [];
-  let pageToken: string | undefined = undefined;
+  let pageToken: string | undefined ;
   let pageCount = 0;
 
   do {

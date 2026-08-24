@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,9 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Brain,
   Calculator,
@@ -34,7 +31,6 @@ import {
   Calendar,
   DollarSign,
   Sparkles,
-  Send,
   Download,
   Mail,
   Plus,
@@ -1241,7 +1237,7 @@ export default function AIBudgetAgent() {
                   <Select
                     value={selectedProjectId?.toString() || ""}
                     onValueChange={(value) =>
-                      setSelectedProjectId(value ? parseInt(value) : null)
+                      setSelectedProjectId(value ? parseInt(value, 10) : null)
                     }
                   >
                     <SelectTrigger>
@@ -1389,7 +1385,7 @@ export default function AIBudgetAgent() {
                             onChange={(e) =>
                               setScopeAnswers({
                                 ...scopeAnswers,
-                                [question.id]: parseInt(e.target.value) || 0,
+                                [question.id]: parseInt(e.target.value, 10) || 0,
                               })
                             }
                           />
@@ -1485,7 +1481,7 @@ export default function AIBudgetAgent() {
                         onChange={(e) =>
                           setClientInfo({
                             ...clientInfo,
-                            budget: parseInt(e.target.value) || undefined,
+                            budget: parseInt(e.target.value, 10) || undefined,
                           })
                         }
                       />
@@ -1547,7 +1543,7 @@ export default function AIBudgetAgent() {
                                 value={newRoleRate / 100}
                                 onChange={(e) =>
                                   setNewRoleRate(
-                                    parseInt(e.target.value) * 100 || 0,
+                                    parseInt(e.target.value, 10) * 100 || 0,
                                   )
                                 }
                                 className="pl-8"
@@ -1621,7 +1617,7 @@ export default function AIBudgetAgent() {
                                       onBlur={(e) =>
                                         saveRoleEdit(
                                           role,
-                                          parseInt(e.target.value) * 100 || 0,
+                                          parseInt(e.target.value, 10) * 100 || 0,
                                         )
                                       }
                                       onKeyDown={(e) => {
@@ -1631,7 +1627,7 @@ export default function AIBudgetAgent() {
                                           ).value;
                                           saveRoleEdit(
                                             role,
-                                            parseInt(v) * 100 || 0,
+                                            parseInt(v, 10) * 100 || 0,
                                           );
                                         } else if (e.key === "Escape") {
                                           cancelRoleEdit();
@@ -1659,7 +1655,7 @@ export default function AIBudgetAgent() {
                                     onChange={(e) =>
                                       updateCustomRate(
                                         role,
-                                        parseInt(e.target.value) * 100 || 0,
+                                        parseInt(e.target.value, 10) * 100 || 0,
                                       )
                                     }
                                     className="pl-8"
@@ -1876,7 +1872,7 @@ export default function AIBudgetAgent() {
                                     prev
                                       ? {
                                           ...prev,
-                                          hours: parseInt(e.target.value) || 0,
+                                          hours: parseInt(e.target.value, 10) || 0,
                                         }
                                       : null,
                                   )
@@ -1899,7 +1895,7 @@ export default function AIBudgetAgent() {
                                       ? {
                                           ...prev,
                                           rate:
-                                            (parseInt(e.target.value) || 0) *
+                                            (parseInt(e.target.value, 10) || 0) *
                                             100,
                                         }
                                       : null,

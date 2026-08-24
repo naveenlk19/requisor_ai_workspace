@@ -57,7 +57,7 @@ function writeProjectToStorage(value: ProjectFilterValue) {
     // (e.g. usePastDiscoveriesFilter consumers in other parts of the app)
     // also update the shareable URL on every change.
     if (typeof window !== "undefined") {
-      let extras: Pick<PastDiscoveriesFilters, "tags" | "source" | "search"> = {
+      const extras: Pick<PastDiscoveriesFilters, "tags" | "source" | "search"> = {
         tags: [],
         source: "all",
         search: "",

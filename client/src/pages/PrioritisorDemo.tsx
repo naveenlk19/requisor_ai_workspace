@@ -5,7 +5,7 @@ import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowUp, ArrowDown, ArrowRight, Clock, Target, TrendingUp, Users, Zap, Brain, ChevronRight, BarChart3, AlertCircle } from 'lucide-react';
+import { Clock, Target, TrendingUp, Users, Zap, Brain, ChevronRight, BarChart3, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Sample tasks data

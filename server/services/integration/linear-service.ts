@@ -1,9 +1,9 @@
 import { IntegrationProvider } from "@shared/integrations";
 import {
   BaseIntegrationService,
-  ProjectData,
-  SyncResult,
-  TaskData,
+  type ProjectData,
+  type SyncResult,
+  type TaskData,
 } from "./base-integration";
 import { storage } from "../../storage";
 import { getLinearAccessToken } from "./linear-connector";

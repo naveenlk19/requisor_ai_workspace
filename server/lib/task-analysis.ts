@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { db } from "../db";
 import { aiTools, taskToolRecommendations, tasks } from "@shared/schema";
-import { and, eq, inArray as in_, sql } from "drizzle-orm";
+import { eq, inArray as in_, } from "drizzle-orm";
 import { ToolStatus } from "@shared/schema";
 import { trackTokenUsage } from "../services/token-tracker";
 

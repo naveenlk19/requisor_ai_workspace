@@ -2,8 +2,8 @@ import OpenAI from "openai";
 import { trackTokenUsage } from "./services/token-tracker";
 import {
   plannerMemory,
-  ProjectContext,
-  ClarificationQuestion,
+  type ProjectContext,
+  type ClarificationQuestion,
   PROJECT_TEMPLATES,
 } from "./project-planner-memory";
 

@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { Project, Task, Insight } from "@shared/schema";
+import type { Project, Task, Insight } from "@shared/schema";
 import { trackTokenUsage } from "../services/token-tracker";
 
 const OPENAI_MODEL = "gpt-4o";
@@ -26,7 +26,7 @@ function getDemoProjectPlan(idea: string) {
   
   // Try to make the demo project plan more specific based on the idea
   const projectName = idea.length > 30 
-    ? idea.substring(0, 30) + "..." 
+    ? `${idea.substring(0, 30)}...` 
     : idea || "New Project";
     
   // Determine if this is a software project
@@ -568,7 +568,7 @@ export async function generateProjectPlan(idea: string) {
         throw new Error("Failed to generate project plan - empty response");
       }
       
-      console.log("✅ Received AI response:", content.substring(0, 100) + "...");
+      console.log("✅ Received AI response:", `${content.substring(0, 100)}...`);
       
       try {
         // Parse the JSON response
@@ -686,7 +686,7 @@ function enhanceProjectPlan(plan: any) {
       if (task.description && task.description.length > 0) {
         // Extract first sentence or first 30 chars of description as name
         const firstSentence = task.description.split('.')[0];
-        task.name = firstSentence.length > 40 ? firstSentence.substring(0, 40) + '...' : firstSentence;
+        task.name = firstSentence.length > 40 ? `${firstSentence.substring(0, 40)}...` : firstSentence;
       } else {
         task.name = `Task ${index + 1}: Implementation Activity`;
       }
@@ -749,7 +749,7 @@ function enhanceProjectPlan(plan: any) {
       if (milestone.description && milestone.description.length > 0) {
         // Extract first sentence or first 40 chars of description as name
         const firstSentence = milestone.description.split('.')[0];
-        milestone.name = firstSentence.length > 40 ? firstSentence.substring(0, 40) + '...' : firstSentence;
+        milestone.name = firstSentence.length > 40 ? `${firstSentence.substring(0, 40)}...` : firstSentence;
       } else {
         // Use a more descriptive fallback name based on the milestone position
         const position = index + 1;

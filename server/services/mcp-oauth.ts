@@ -22,7 +22,7 @@
 //     silent auto-approval would let a malicious page mint tokens for a
 //     signed-in user. Approval POSTs back with a session-bound CSRF nonce.
 
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 import { Router, type Request, type Response } from "express";
 import { storage } from "../storage";
 import { generatePlainToken, hashToken, tokenDisplayPrefix } from "./mcp-server";

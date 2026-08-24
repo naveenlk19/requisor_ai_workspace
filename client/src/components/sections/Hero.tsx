@@ -4,19 +4,11 @@ import { useAuth } from "@/hooks/useAuth.tsx";
 import { useLocation } from "wouter";
 import CanvasCursor from "@/pages/cursor_d";
 import {
-  ArrowRight,
-  User,
-  Users,
-  Building2,
   Zap,
-  Sparkles,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import Slider from "./slider";
 import Cards from "./cards";
-import Dino from "./Dino";
 import { AIAgentsSection } from "./AIAgentsSection";
-import Type from "./type";
 import { AgentSquad } from "./AgentSquad";
 
 export function Hero() {

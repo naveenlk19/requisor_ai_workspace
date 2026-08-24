@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import type React from "react";
+import { useState, useEffect } from "react";
 import {
   MessageCircle,
   X,
@@ -15,7 +16,6 @@ import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { apiRequest } from "@/lib/queryClient";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,

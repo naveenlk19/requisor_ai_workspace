@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useQuery } from '@tanstack/react-query';
 import { getUserInvitations } from '@/lib/api';
 import { UserInvitations } from '@/components/projects/UserInvitations';

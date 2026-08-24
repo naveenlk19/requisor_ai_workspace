@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Maximize2, Minimize2, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 import image1 from "@assets/image_1764024922702.png";
 import image2 from "@assets/image_1764024983322.png";

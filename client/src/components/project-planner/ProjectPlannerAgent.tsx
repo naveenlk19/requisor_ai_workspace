@@ -16,12 +16,11 @@ import {
   Upload,
   FileText,
   X,
-  Download,
   Eye,
   EyeOff,
   ArrowRight,
 } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { ProjectPlannerCanvas } from "./ProjectPlannerCanvas";

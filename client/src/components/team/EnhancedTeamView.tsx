@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -9,13 +9,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { 
-  Users, Search, Filter, Plus, Edit, Trash2, Clock, Briefcase, 
-  TrendingUp, AlertCircle, CheckCircle, Brain, Zap, BarChart3,
-  Calendar, MapPin, Star, Activity, Target, UserPlus, Settings,
-  Mail, Shield, Code, Palette, PenTool, Database, Cloud, GitBranch
+  Users, Search, Trash2, Clock, Briefcase, 
+  TrendingUp, AlertCircle, CheckCircle, Brain, BarChart3,MapPin, Star, Activity, Target, UserPlus, 
+  Mail, Shield, Code, Palette, PenTool, Cloud, GitBranch
 } from 'lucide-react';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
@@ -492,7 +491,7 @@ export default function EnhancedTeamView() {
                   id="capacity"
                   type="number"
                   value={newMember.capacity}
-                  onChange={(e) => setNewMember({ ...newMember, capacity: parseInt(e.target.value) || 40 })}
+                  onChange={(e) => setNewMember({ ...newMember, capacity: parseInt(e.target.value, 10) || 40 })}
                 />
               </div>
               <div className="grid gap-2">
@@ -501,7 +500,7 @@ export default function EnhancedTeamView() {
                   id="hourlyRate"
                   type="number"
                   value={newMember.hourlyRate}
-                  onChange={(e) => setNewMember({ ...newMember, hourlyRate: parseInt(e.target.value) || 100 })}
+                  onChange={(e) => setNewMember({ ...newMember, hourlyRate: parseInt(e.target.value, 10) || 100 })}
                 />
               </div>
             </div>

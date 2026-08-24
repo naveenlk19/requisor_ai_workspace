@@ -9,7 +9,6 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { 
   CheckCircle, 
-  XCircle, 
   Loader2, 
   Settings, 
   Eye, 

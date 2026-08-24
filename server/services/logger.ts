@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export class Logger {
   private baseDir: string;
@@ -35,7 +35,7 @@ export class Logger {
       ...(data && { data })
     };
     
-    const logLine = JSON.stringify(logEntry) + '\n';
+    const logLine = `${JSON.stringify(logEntry)}\n`;
     const logFile = this.getLogFileName(service);
     
     // Append to log file

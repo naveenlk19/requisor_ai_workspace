@@ -332,7 +332,7 @@ function extractProjectName(prompt: string): string {
   // Try to extract project name from prompt
   const patterns = [
     /(?:build|create|develop|design)\s+(?:a|an)?\s*([^.]+?)(?:\s+(?:for|that|with)|$)/i,
-    /(?:project|app|application|system|platform)\s*(?:called|named)?\s*[:\-]?\s*([^.]+?)(?:\s|$)/i,
+    /(?:project|app|application|system|platform)\s*(?:called|named)?\s*[:-]?\s*([^.]+?)(?:\s|$)/i,
     /^([^.]+?)(?:\s+project|\s+app|\s+application|\s+system|\s+platform)/i
   ];
 
@@ -345,7 +345,7 @@ function extractProjectName(prompt: string): string {
 
   // Fallback: use first few words
   const words = prompt.split(' ').slice(0, 5).join(' ');
-  return words.length > 50 ? words.substring(0, 50) + '...' : words;
+  return words.length > 50 ? `${words.substring(0, 50)}...` : words;
 }
 
 function determinePriority(deliverable: string, index: number): 'high' | 'medium' | 'low' {

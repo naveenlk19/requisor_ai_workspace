@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import html2canvas from "html2canvas";
@@ -11,16 +11,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import {
   ChefHat,
   Clock,
   Users,
-  ListOrdered,
   Camera,
   Mic,
   Video,
@@ -29,17 +26,9 @@ import {
   Image,
   Sparkles,
   Loader2,
-  Plus,
-  Trash2,
-  Edit3,
   Check,
-  X,
   Play,
-  Pause,
-  Volume2,
-  AlertCircle,
   Share2,
-  BookOpen,
   Palette,
   Film,
   Save

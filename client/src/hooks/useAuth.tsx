@@ -1,5 +1,5 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import { useQuery, useMutation, UseMutationResult } from '@tanstack/react-query';
+import { createContext, useContext, type ReactNode } from 'react';
+import { useQuery, useMutation, type UseMutationResult } from '@tanstack/react-query';
 import { apiRequest, queryClient } from '../lib/queryClient';
 
 interface User {

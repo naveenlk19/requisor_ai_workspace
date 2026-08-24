@@ -5,9 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Plus, Clock, CheckCircle, AlertCircle, TrendingUp, FolderOpen, Users, Calendar } from "lucide-react";
+import { Plus, Clock, CheckCircle, AlertCircle, FolderOpen, Calendar } from "lucide-react";
 import { Link } from "wouter";
-import { useWebSocket } from "@/hooks/useWebSocket";
 import { updateProjectLastOpened } from "@/lib/projectUtils";
 import { useUpgradeModal } from "@/hooks/useUpgradeModal";
 

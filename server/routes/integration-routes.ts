@@ -4,7 +4,6 @@ import { createIntegrationService } from "../services/integration";
 import { isAuthenticated } from "../auth";
 import { storage } from "../storage";
 import { config } from "../config/environment";
-import { z } from "zod";
 import {
   getLinearAccessToken,
   isLinearConnectorAvailable,
@@ -125,7 +124,7 @@ router.get("/", isAuthenticated, async (req: any, res) => {
 // Get a specific integration
 router.get("/:id", isAuthenticated, async (req: any, res) => {
   try {
-    const integrationId = parseInt(req.params.id);
+    const integrationId = parseInt(req.params.id, 10);
     const integration = await storage.getIntegration(integrationId);
     const userId = req.user.dbUserId || req.user.claims?.sub || req.user.id;
     
@@ -217,7 +216,7 @@ router.get("/oauth/:provider", async (req: any, res) => {
 // Get available workspaces/boards from an integration
 router.get("/:id/workspaces", isAuthenticated, async (req: any, res) => {
   try {
-    const integrationId = parseInt(req.params.id);
+    const integrationId = parseInt(req.params.id, 10);
     const integration = await storage.getIntegration(integrationId);
     
     if (!integration) {
@@ -246,7 +245,7 @@ router.get("/:id/workspaces", isAuthenticated, async (req: any, res) => {
 // Set workspace for an integration
 router.post("/:id/workspace", isAuthenticated, async (req: any, res) => {
   try {
-    const integrationId = parseInt(req.params.id);
+    const integrationId = parseInt(req.params.id, 10);
     const { workspaceId } = req.body;
     
     if (!workspaceId) {
@@ -279,7 +278,7 @@ router.post("/:id/workspace", isAuthenticated, async (req: any, res) => {
 // Pull projects from integration
 router.post("/:id/pull-projects", isAuthenticated, async (req: any, res) => {
   try {
-    const integrationId = parseInt(req.params.id);
+    const integrationId = parseInt(req.params.id, 10);
     const integration = await storage.getIntegration(integrationId);
     
     if (!integration) {
@@ -373,7 +372,7 @@ router.post("/:id/pull-projects", isAuthenticated, async (req: any, res) => {
 // Push a project to integration
 router.post("/projects/:projectId/push", isAuthenticated, async (req: any, res) => {
   try {
-    const projectId = parseInt(req.params.projectId);
+    const projectId = parseInt(req.params.projectId, 10);
     const { integrationId } = req.body;
     
     if (!integrationId) {
@@ -388,7 +387,7 @@ router.post("/projects/:projectId/push", isAuthenticated, async (req: any, res) 
     
     // Get project and integration
     const project = await storage.getProject(projectId);
-    const integration = await storage.getIntegration(parseInt(integrationId));
+    const integration = await storage.getIntegration(parseInt(integrationId, 10));
     
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
@@ -443,7 +442,7 @@ router.post("/projects/:projectId/push", isAuthenticated, async (req: any, res) 
 // Pull tasks from integration for a project
 router.post("/projects/:projectId/pull-tasks", isAuthenticated, async (req: any, res) => {
   try {
-    const projectId = parseInt(req.params.projectId);
+    const projectId = parseInt(req.params.projectId, 10);
     
     // Check if user has access to the project
     const isAuthorized = await storage.isUserAuthorized(projectId, req.user.id);
@@ -537,7 +536,7 @@ router.post("/projects/:projectId/pull-tasks", isAuthenticated, async (req: any,
 // Push a task to integration
 router.post("/tasks/:taskId/push", isAuthenticated, async (req: any, res) => {
   try {
-    const taskId = parseInt(req.params.taskId);
+    const taskId = parseInt(req.params.taskId, 10);
     const { integrationId } = req.body;
     
     if (!integrationId) {
@@ -558,7 +557,7 @@ router.post("/tasks/:taskId/push", isAuthenticated, async (req: any, res) => {
     }
     
     // Get integration
-    const integration = await storage.getIntegration(parseInt(integrationId));
+    const integration = await storage.getIntegration(parseInt(integrationId, 10));
     
     if (!integration) {
       return res.status(404).json({ message: "Integration not found" });
@@ -612,7 +611,7 @@ router.post("/tasks/:taskId/push", isAuthenticated, async (req: any, res) => {
 // Delete an integration
 router.delete("/:id", isAuthenticated, async (req: any, res) => {
   try {
-    const integrationId = parseInt(req.params.id);
+    const integrationId = parseInt(req.params.id, 10);
     const integration = await storage.getIntegration(integrationId);
     
     if (!integration) {

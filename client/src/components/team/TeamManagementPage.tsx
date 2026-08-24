@@ -9,21 +9,18 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Users, 
   UserPlus, 
   Mail, 
-  Shield, 
   Clock, 
   CheckCircle, 
   XCircle,
-  User,
   Send,
   Loader2,
   AlertCircle,
-  Edit2,
   Trash2,
   RefreshCw
 } from 'lucide-react';
@@ -355,7 +352,7 @@ export default function TeamManagementPage() {
                             id="capacity"
                             type="number"
                             value={newMember.capacity}
-                            onChange={(e) => setNewMember({ ...newMember, capacity: parseInt(e.target.value) })}
+                            onChange={(e) => setNewMember({ ...newMember, capacity: parseInt(e.target.value, 10) })}
                           />
                         </div>
                         <div>
@@ -364,7 +361,7 @@ export default function TeamManagementPage() {
                             id="hourlyRate"
                             type="number"
                             value={newMember.hourlyRate}
-                            onChange={(e) => setNewMember({ ...newMember, hourlyRate: parseInt(e.target.value) })}
+                            onChange={(e) => setNewMember({ ...newMember, hourlyRate: parseInt(e.target.value, 10) })}
                           />
                         </div>
                       </div>

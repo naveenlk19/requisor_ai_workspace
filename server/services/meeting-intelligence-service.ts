@@ -20,7 +20,7 @@
  */
 
 import OpenAI from "openai";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { db, pool } from "../db";
 import {
   meetingIntelligenceDocuments,
@@ -28,7 +28,7 @@ import {
   type MeetingIntelligenceDocument,
   type MeetingIntelligenceBatch,
 } from "@shared/schema";
-import { eq, desc, and, sql } from "drizzle-orm";
+import { eq, desc, and, } from "drizzle-orm";
 import { trackTokenUsage, getModelForBudget } from "./token-tracker";
 import { persistMemory } from "./agent-memory";
 
@@ -624,7 +624,7 @@ async function runExtractionOnRow(
     };
 
     const partials: ExtractedDocument[] = [];
-    let totalUsage = { input: 0, output: 0, total: 0 };
+    const totalUsage = { input: 0, output: 0, total: 0 };
     let modelUsed = "gpt-4o";
     for (const chunk of chunks) {
       const { extraction, usage, model } = await extractFromText(

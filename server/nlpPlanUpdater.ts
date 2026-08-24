@@ -156,7 +156,7 @@ export class NLPTaskUpdater {
         };
         const monthIndex = monthMap[month.toLowerCase()];
         if (monthIndex !== undefined) {
-          const date = new Date(parseInt(year), monthIndex, parseInt(day));
+          const date = new Date(parseInt(year, 10), monthIndex, parseInt(day, 10));
           return date.toISOString().split('T')[0];
         }
       }
@@ -171,7 +171,7 @@ export class NLPTaskUpdater {
       const slashDate = dateStr.match(/(\d{1,2})[/-](\d{1,2})[/-](\d{4})/);
       if (slashDate) {
         const [, month, day, year] = slashDate;
-        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+        const date = new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10));
         return date.toISOString().split('T')[0];
       }
 

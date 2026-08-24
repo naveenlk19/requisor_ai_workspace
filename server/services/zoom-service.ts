@@ -264,7 +264,7 @@ function parseVttToPlainText(vtt: string): string {
     }
   }
 
-  return textLines.join(" ").replace(/\n /g, "\n").replace(/  +/g, " ").trim();
+  return textLines.join(" ").replace(/\n /g, "\n").replace(/ {2,}/g, " ").trim();
 }
 
 export async function sendMeetingInvitations(

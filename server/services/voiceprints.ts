@@ -53,12 +53,12 @@ export function extractTextEmbedding(text: string): number[] {
     v[fnv1a(w) % VOICEPRINT_DIM] += 1;
   }
   for (let i = 0; i < words.length - 1; i++) {
-    v[fnv1a(words[i] + "_" + words[i + 1]) % VOICEPRINT_DIM] += 0.5;
+    v[fnv1a(`${words[i]}_${words[i + 1]}`) % VOICEPRINT_DIM] += 0.5;
   }
   // function-word frequency gives a coarse style signature
   for (const fw of FUNCTION_WORDS) {
     const c = words.filter((w) => w === fw).length;
-    if (c > 0) v[fnv1a("fw_" + fw) % VOICEPRINT_DIM] += c * 1.5;
+    if (c > 0) v[fnv1a(`fw_${fw}`) % VOICEPRINT_DIM] += c * 1.5;
   }
   // utterance-length signal
   const avgLen = words.reduce((s, w) => s + w.length, 0) / words.length;

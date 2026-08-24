@@ -869,7 +869,7 @@ export default function PastDiscoveriesPage() {
               setChatMessages((prev) =>
                 prev.map((m) =>
                   m.id === assistantId && !m.content.includes("(some sources were trimmed)")
-                    ? { ...m, content: m.content + "\n\n_(some sources were trimmed to fit the model)_" }
+                    ? { ...m, content: `${m.content}\n\n_(some sources were trimmed to fit the model)_` }
                     : m,
                 ),
               );

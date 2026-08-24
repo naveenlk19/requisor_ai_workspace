@@ -11,7 +11,6 @@ import {
   MessageSquare,
   StickyNote,
   Plus,
-  Trash2,
   Mic,
   Loader2,
 } from "lucide-react";
@@ -52,7 +51,7 @@ export function TranscriptContextPanel({
     for (const file of acceptedFiles) {
       const text = await file.text();
       const newItem: ContextItem = {
-        id: "ctx_" + Date.now() + "_" + Math.random().toString(36).slice(2),
+        id: `ctx_${Date.now()}_${Math.random().toString(36).slice(2)}`,
         type: file.name.includes("transcript") || file.type === "text/plain"
           ? "transcript"
           : "file",
@@ -113,7 +112,7 @@ export function TranscriptContextPanel({
 
       const data = await res.json();
       const newItem: ContextItem = {
-        id: "audio_" + Date.now(),
+        id: `audio_${Date.now()}`,
         type: "transcript",
         title: file.name.replace(/\.[^/.]+$/, ""),
         content: data.transcript,
@@ -152,7 +151,7 @@ export function TranscriptContextPanel({
   const addNote = () => {
     if (!noteInput.trim()) return;
     const newItem: ContextItem = {
-      id: "note_" + Date.now(),
+      id: `note_${Date.now()}`,
       type: "note",
       title: "Pasted Note",
       content: noteInput.trim(),

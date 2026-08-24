@@ -20,7 +20,7 @@
 //     casing chunk-to-chunk.
 
 import { sql } from "drizzle-orm";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import OpenAI from "openai";
 import { z } from "zod";
 import { db } from "../db";

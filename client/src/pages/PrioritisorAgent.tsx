@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -6,11 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -19,25 +16,12 @@ import { Switch } from "@/components/ui/switch";
 import {
   Target,
   Sparkles,
-  TrendingUp,
-  TrendingDown,
   AlertCircle,
-  CheckCircle,
-  Clock,
-  DollarSign,
-  Zap,
   Settings,
-  RefreshCw,
-  ArrowUpDown,
-  Filter,
-  Download,
-  BarChart3,
   Brain,
   Loader2,
   ChevronUp,
   ChevronDown,
-  ArrowRight,
-  Info
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { apiRequest } from "@/lib/queryClient";
@@ -475,7 +459,7 @@ export default function PrioritisorAgent() {
                       <Label htmlFor="project-select">Project (Optional)</Label>
                       <Select 
                         value={selectedProjectId?.toString() || "all"} 
-                        onValueChange={(value) => setSelectedProjectId(value === "all" ? null : parseInt(value))}
+                        onValueChange={(value) => setSelectedProjectId(value === "all" ? null : parseInt(value, 10))}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="All Projects" />

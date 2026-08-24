@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Sidebar } from "./Sidebar";
-import { DynamicChat } from "@/components/ai-chat/DynamicChat";
 import { Menu, X } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { FloatingProjectAssistant } from "@/components/FloatingProjectAssistant";
 import { OnboardingTour, useOnboardingTour } from "@/components/onboarding/OnboardingTour";
 
 interface AppLayoutProps {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
@@ -8,11 +8,9 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'wouter';
 import { useForm } from 'react-hook-form';
@@ -25,40 +23,19 @@ import {
   Brain, 
   Clock, 
   AlertTriangle, 
-  CheckCircle, 
-  User, 
   Bot, 
-  Calendar, 
   BarChart3,
   Filter,
-  Plus,
   Zap,
   UserPlus,
   Target,
-  ArrowRight,
-  Settings,
-  TrendingUp,
-  Activity,
-  Lightbulb,
-  Timer,
-  UserCheck,
-  Shuffle,
-  PlayCircle,
-  PieChart,
-  Search,
   Eye,
-  Edit3,
-  Coffee,
-  Briefcase,
   Sparkles,
-  ChevronRight,
-  ArrowUpDown,
   Star,
   Loader2,
   Send,
   MessageSquare,
   DollarSign,
-  TrendingDown
 } from 'lucide-react';
 
 interface TeamMember {
@@ -436,7 +413,7 @@ function AddTeamMemberDialog() {
                         type="number" 
                         placeholder="40" 
                         {...field} 
-                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
                       />
                     </FormControl>
                     <FormMessage />
@@ -454,7 +431,7 @@ function AddTeamMemberDialog() {
                         type="number" 
                         placeholder="75" 
                         {...field} 
-                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
                       />
                     </FormControl>
                     <FormMessage />

@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Project } from "@shared/schema";
+import type { Project } from "@shared/schema";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { CardSkeleton } from "@/components/ui/skeleton";
 import { ChevronRight } from "lucide-react";

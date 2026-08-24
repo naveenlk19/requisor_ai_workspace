@@ -1,5 +1,5 @@
 import { storage } from "../storage";
-import { BudgetEstimate, BudgetLineItem, Project } from "@shared/schema";
+import type { BudgetEstimate, BudgetLineItem, Project } from "@shared/schema";
 import { MailService } from '@sendgrid/mail';
 
 interface QuoteData {

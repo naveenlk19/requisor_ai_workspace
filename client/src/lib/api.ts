@@ -1,5 +1,5 @@
-import { AIProjectPlan } from "@/types";
-import IntegrationProvider from "@/types/integration";
+import type { AIProjectPlan } from "@/types";
+import type IntegrationProvider from "@/types/integration";
 
 // Define the types needed for API requests
 /**

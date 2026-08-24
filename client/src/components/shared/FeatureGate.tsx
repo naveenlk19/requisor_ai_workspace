@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { Lock, Crown, Star, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

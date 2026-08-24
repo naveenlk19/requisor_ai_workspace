@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, LayoutDashboard, Share2, Check, Send, Paperclip, Facebook, Linkedin, Instagram, Twitter } from "lucide-react";
+import { MessageSquare, LayoutDashboard, Share2, Check, Send, Paperclip, } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CanvasCursor from "@/pages/cursor_d";
 

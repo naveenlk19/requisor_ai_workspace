@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { deepProjectAnalysis } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
@@ -17,7 +17,7 @@ import {
   Activity,
   TrendingUp
 } from "lucide-react";
-import { AnalysisDimension, DeepAnalysisResult } from "@/types";
+import type { AnalysisDimension, DeepAnalysisResult } from "@/types";
 
 interface ProjectAnalysisProps {
   projectId: number;

@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Brain, Send, Sparkles, Loader2 } from 'lucide-react';
+import { Brain, Send, Loader2 } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
 

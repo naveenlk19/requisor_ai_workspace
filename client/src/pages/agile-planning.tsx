@@ -12,14 +12,10 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { queryClient } from "@/lib/queryClient";
 import {
   Send,
   Loader2,
-  Plus,
   Save,
-  Download,
-  RefreshCw,
   CheckCircle,
   Rocket,
   Target,
@@ -693,7 +689,7 @@ export default function AgilePlanningPage() {
                                             onChange={(e) =>
                                               handleEditStory(story.id, {
                                                 storyPoints:
-                                                  parseInt(e.target.value) ||
+                                                  parseInt(e.target.value, 10) ||
                                                   undefined,
                                               })
                                             }

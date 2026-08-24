@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import ReactMarkdown from "react-markdown";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,7 +13,6 @@ import {
   Loader2,
   Rocket,
   Target,
-  Calendar,
   Upload,
   FileText,
   X,
@@ -1316,7 +1314,7 @@ export function ProjectPlannerAgentV2() {
       );
       const EVIDENCE_PER_ITEM_CAP = 30000;
       const EVIDENCE_TOTAL_CAP = 90000;
-      let evidenceContextText: string | undefined = undefined;
+      let evidenceContextText: string | undefined ;
       if (selectedEvidenceIds.length > 0) {
         let evTotal = 0;
         const evParts: string[] = [];
@@ -1572,7 +1570,7 @@ export function ProjectPlannerAgentV2() {
         let sourceContext =
           labels.length > 0 ? `chat | From: ${labels.join("; ")}` : "chat";
         if (sourceContext.length > 1900)
-          sourceContext = sourceContext.slice(0, 1897) + "...";
+          sourceContext = `${sourceContext.slice(0, 1897)}...`;
         return apiRequest("/api/feature-candidates", {
           method: "POST",
           body: JSON.stringify({
@@ -1997,7 +1995,7 @@ export function ProjectPlannerAgentV2() {
       setProjectNameInput("");
       console.error("Error saving project:", error);
       let errorMessage = "Failed to save project. Please try again.";
-      let errorTitle = "Error";
+      const errorTitle = "Error";
 
       const errMsg = error instanceof Error ? error.message : String(error);
       if (errMsg.includes("403") || errMsg.includes("limit")) {
@@ -2758,7 +2756,7 @@ export function ProjectPlannerAgentV2() {
                           const parts = message.id.split("-");
                           const msgProjectId =
                             parts.length >= 3
-                              ? parseInt(parts[parts.length - 1])
+                              ? parseInt(parts[parts.length - 1], 10)
                               : null;
                           const targetProjectId =
                             msgProjectId &&

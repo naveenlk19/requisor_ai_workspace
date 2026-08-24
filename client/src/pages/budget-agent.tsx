@@ -4,11 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { Calculator, FileText, Mail, Download, DollarSign, Clock, User, Briefcase } from "lucide-react";
@@ -297,7 +295,7 @@ export default function BudgetAgent() {
                     <Label htmlFor="project">Project</Label>
                     <Select 
                       value={selectedProjectId?.toString() || ""} 
-                      onValueChange={(value) => setSelectedProjectId(parseInt(value))}
+                      onValueChange={(value) => setSelectedProjectId(parseInt(value, 10))}
                       disabled={projectsLoading}
                     >
                       <SelectTrigger>
@@ -383,7 +381,7 @@ export default function BudgetAgent() {
                         value={rate / 100}
                         onChange={(e) => setCustomRates({
                           ...customRates,
-                          [role]: parseInt(e.target.value) * 100
+                          [role]: parseInt(e.target.value, 10) * 100
                         })}
                         placeholder="85"
                       />

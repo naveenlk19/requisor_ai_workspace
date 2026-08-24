@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Task } from '@shared/schema';
+import type { Task } from '@shared/schema';
 import { useQuery } from '@tanstack/react-query';
 import { getProjectTasks } from '@/lib/api';
 import { TaskList } from './TaskList';
 import { TaskRecommendationsSidebar } from './TaskRecommendationsSidebar';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
 
 interface TaskDetailsWithRecommendationsProps {
   projectId: number;

@@ -4,7 +4,7 @@ import { JiraService } from "./jira-service";
 import { MondayService } from "./monday-service";
 import { SmartsheetService } from "./smartsheet-service";
 import { LinearService } from "./linear-service";
-import { BaseIntegrationService } from "./base-integration";
+import type { BaseIntegrationService } from "./base-integration";
 
 /**
  * Factory function to create integration service instances

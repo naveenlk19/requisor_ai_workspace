@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { X, Calendar as CalendarIcon, Clock, User, MessageSquare, Paperclip, Plus, Send, Edit2, Trash2, Download, CheckSquare, Sparkles, ChevronDown, ChevronRight, Check } from "lucide-react";
+import { useState, } from "react";
+import { X, Calendar as CalendarIcon, Clock, Paperclip, Plus, Send, Edit2, Trash2, Download, Sparkles, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -382,9 +382,9 @@ export function TaskDetailsPanel({ task, projectId, onClose }: TaskDetailsPanelP
   };
 
   const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return bytes + " B";
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
   return (

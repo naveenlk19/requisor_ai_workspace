@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,20 +9,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { 
   UserPlus, 
   Calendar, 
-  Clock, 
   Users, 
   FileText, 
   Mail, 
   CheckCircle, 
-  AlertCircle,
   Plus,
-  Edit,
-  Trash2,
   Play,
   Brain,
   Sparkles,
@@ -30,7 +26,6 @@ import {
   MessageSquare,
   BookOpen,
   Settings,
-  Eye
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -603,7 +598,7 @@ export default function OnboardingAgent() {
                       id="duration"
                       type="number"
                       value={newPlanData.duration}
-                      onChange={(e) => setNewPlanData({...newPlanData, duration: parseInt(e.target.value) || 7})}
+                      onChange={(e) => setNewPlanData({...newPlanData, duration: parseInt(e.target.value, 10) || 7})}
                       min="1"
                       max="90"
                       className="mt-1"

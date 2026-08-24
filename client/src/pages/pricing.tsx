@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import type React from "react";
+import { useState, useEffect, } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { loadStripe, Stripe } from "@stripe/stripe-js";
+import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import { Button } from "@/components/ui/button";
 import {
   Card,

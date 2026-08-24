@@ -1,8 +1,8 @@
-import React from 'react';
+
 import { Link } from 'wouter';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, FileText, Hash, Layers, PenTool, Settings2, Sparkles } from 'lucide-react';
+import { ArrowRight, Hash, Layers, PenTool, Settings2, Sparkles } from 'lucide-react';
 
 export default function JiraAgent() {
   const tools = [

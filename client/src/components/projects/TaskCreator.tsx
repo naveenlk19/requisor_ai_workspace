@@ -1,16 +1,15 @@
-import React from "react";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import {
   createTask,
-  getProjectTasks,
   getProjectMembers,
-  NewTask,
+  type NewTask,
 } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
-import { CalendarIcon, Plus, User } from "lucide-react";
+import { CalendarIcon, Plus, } from "lucide-react";
 import { format } from "date-fns";
 
 import {
@@ -29,7 +28,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -389,7 +387,7 @@ export default function TaskCreator({
                     <FormLabel>Parent Milestone (Optional)</FormLabel>
                     <Select
                       onValueChange={(value) =>
-                        field.onChange(value ? parseInt(value) : null)
+                        field.onChange(value ? parseInt(value, 10) : null)
                       }
                       value={field.value?.toString() || ""}
                     >

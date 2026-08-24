@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
@@ -11,25 +11,19 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import {
   Target,
   Sparkles,
-  TrendingUp,
   Clock,
   DollarSign,
   AlertTriangle,
-  CheckCircle,
-  ArrowUpDown,
   Brain,
   Loader2,
   Save,
-  RefreshCw,
   Settings,
   BarChart3,
-  Info,
   ChevronUp,
   ChevronDown,
   Zap,
@@ -231,14 +225,16 @@ export default function PrioritisorAgentV2() {
       case 'name':
         compareValue = a.name.localeCompare(b.name);
         break;
-      case 'urgency':
+      case 'urgency': {
         const urgencyOrder = { high: 3, medium: 2, low: 1 };
         compareValue = urgencyOrder[a.urgencyLevel] - urgencyOrder[b.urgencyLevel];
         break;
-      case 'roi':
+      }
+      case 'roi': {
         const roiOrder = { high: 3, medium: 2, low: 1 };
         compareValue = roiOrder[a.roiLevel] - roiOrder[b.roiLevel];
         break;
+      }
     }
     
     return sortOrder === 'desc' ? -compareValue : compareValue;
@@ -345,7 +341,7 @@ export default function PrioritisorAgentV2() {
               <CardContent>
                 <Select 
                   value={selectedProjectId?.toString() || "all"} 
-                  onValueChange={(value) => setSelectedProjectId(value === "all" ? null : parseInt(value))}
+                  onValueChange={(value) => setSelectedProjectId(value === "all" ? null : parseInt(value, 10))}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a project" />

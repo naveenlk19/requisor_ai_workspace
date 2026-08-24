@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 const DISCORD_API = "https://discord.com/api/v10";
 

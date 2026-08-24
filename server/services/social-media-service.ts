@@ -3,8 +3,8 @@ import { logService } from "./log-service";
 import { twitterOAuth } from "./twitter-oauth";
 import axios from "axios";
 import FormData from "form-data";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import mime from "mime-types";
 
 const FB_API_VERSION = "v21.0";
@@ -92,7 +92,7 @@ export class SocialMediaService {
             let facebookUrl: string;
 
             // Handle Media
-            let photoIds: string[] = [];
+            const photoIds: string[] = [];
 
             if (mediaFiles && mediaFiles.length > 0) {
                 for (const file of mediaFiles) {
@@ -278,7 +278,7 @@ export class SocialMediaService {
 
             const executePublish = async (token: string) => {
                 // Handle media
-                let mediaIds: string[] = [];
+                const mediaIds: string[] = [];
                 if (mediaFiles && mediaFiles.length > 0) {
                     for (const file of mediaFiles) {
                         try {

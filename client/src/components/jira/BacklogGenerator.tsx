@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
-import { AlertCircle, CheckCircle2, Code2, Hash, Loader2, Sparkles, TrendingUp } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Hash, Loader2, Sparkles, TrendingUp } from 'lucide-react';
 
 interface BacklogGeneratorProps {
   projectId: number;

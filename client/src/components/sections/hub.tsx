@@ -3,7 +3,6 @@ import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search,
   Folder,
   Brain,
   CreditCard,
@@ -18,38 +17,19 @@ import {
   FolderKanban,
   DollarSign,
   Users,
-  FileText,
   Target,
   Lightbulb,
   BarChart3,
   Share2,
   Puzzle,
-  ChevronDown,
-  LogOut,
-  Settings,
-  Menu,
-  X,
   ArrowUpRight,
   Check,
   Rocket,
   Shield,
-  Cpu,
-  Sun,
-  Moon,
   Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useUpgradeModal } from "@/hooks/useUpgradeModal";
 
 type AgentStatus = "active" | "beta" | "coming-soon";
@@ -1236,8 +1216,8 @@ export function Hub() {
                   key={i}
                   className="absolute w-1 h-1 bg-cyan-400/30 rounded-full"
                   initial={{
-                    x: Math.random() * 100 + "%",
-                    y: Math.random() * 100 + "%",
+                    x: `${Math.random() * 100}%`,
+                    y: `${Math.random() * 100}%`,
                     opacity: 0.3,
                   }}
                   animate={{

@@ -1,30 +1,8 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useInView, useReducedMotion } from "framer-motion";
+
+import { motion, } from "framer-motion";
 import {
-  ArrowRight,
-  Play,
-  Menu,
   X,
   Check,
-  Upload,
-  MessageSquare,
-  Code,
-  Star,
-  Send,
-  Zap,
-  Target,
-  Video,
-  Mic,
-  Brain,
-  FileText,
-  BarChart3,
-  Layers,
-  ChevronRight,
-  Quote,
-  Database,
-  Network,
-  ScanLine,
-  Rocket,
 } from "lucide-react";
 export function Why() {
   const comparisonRows = [

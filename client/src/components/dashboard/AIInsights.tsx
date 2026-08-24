@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { CardSkeleton } from "@/components/ui/skeleton";
-import { InsightItem, InsightType } from "@/types";
+import type { InsightType } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Cpu, 

@@ -39,7 +39,7 @@ async function testDatabaseConnection() {
     console.log('Total tasks in database:', taskCount.rows[0].count);
     
     // Insert a test task if needed
-    if (parseInt(taskCount.rows[0].count) < 1) {
+    if (parseInt(taskCount.rows[0].count, 10) < 1) {
       console.log('Adding a test task...');
       const insertTask = await pool.query(`
         INSERT INTO tasks (name, description, project_id) 

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getProjectTasks, updateTask, deleteTask } from '@/lib/api';
+import { updateTask, deleteTask } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
-import { ProjectTask } from '@/types';
-import type { Task } from '@shared/schema';
+import type { ProjectTask } from '@/types';
 import { format } from 'date-fns';
 import {
   ChevronDown,
@@ -13,24 +12,16 @@ import {
   Plus,
   CheckCircle2,
   Circle,
-  Clock,
   CalendarDays,
   Flag,
 } from 'lucide-react';
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-  CardFooter,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -38,10 +29,8 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import {
   AlertDialog,
@@ -52,9 +41,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import MilestoneCreator from './MilestoneCreator';
 import TaskCreator from './TaskCreator';

@@ -1,4 +1,4 @@
-import { motion, Variants } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { useState, useRef } from "react";
 
 const fadeUp: Variants = {

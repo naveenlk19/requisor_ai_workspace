@@ -228,7 +228,7 @@ export function AssigneeSelect({
             {aiAgents.map((agent: any) => (
               <SelectItem key={agent.id} value={`ai_${agent.id}`}>
                 <div className="flex items-center gap-3 py-1">
-                  <Avatar className="h-8 w-8" style={{ backgroundColor: agent.color + "20" }}>
+                  <Avatar className="h-8 w-8" style={{ backgroundColor: `${agent.color}20` }}>
                     <AvatarFallback 
                       className="text-sm" 
                       style={{ color: agent.color }}

@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProject } from "@/lib/api";
-import { NewProject } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { CalendarIcon, Plus } from "lucide-react";
@@ -26,7 +25,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";

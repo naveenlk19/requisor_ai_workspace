@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   syncTaskWithProvider,
@@ -25,7 +25,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   Cpu,
@@ -34,7 +33,6 @@ import {
   ArrowUp,
   ArrowDown,
   Check,
-  AlertCircle,
 } from "lucide-react";
 
 interface TaskSyncActionsProps {

@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { storage } from "../storage";
 import { trackTokenUsage } from "./token-tracker";
-import { Task, Project, InsertBudgetEstimate, InsertBudgetLineItem } from "@shared/schema";
+import type { Task, Project, InsertBudgetEstimate, InsertBudgetLineItem } from "@shared/schema";
 
 interface BudgetEstimationRequest {
   projectId: number;

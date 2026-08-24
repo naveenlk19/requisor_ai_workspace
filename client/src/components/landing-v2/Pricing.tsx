@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+
 import PartnerSlider from "./PartnerSlider";
 export default function Pricing() {
   return (

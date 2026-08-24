@@ -673,7 +673,7 @@ function SourceMapping({
             >
               <Icon className="h-2.5 w-2.5" />
               {chip.title.length > 40
-                ? chip.title.slice(0, 40) + "…"
+                ? `${chip.title.slice(0, 40)}…`
                 : chip.title}
             </button>
           );

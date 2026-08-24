@@ -1,4 +1,4 @@
-import { Task, InsertTask } from "@shared/schema";
+import type { Task, } from "@shared/schema";
 import { storage } from "../storage";
 import { createSheetInSmartsheet, updateRowsInSmartsheet } from "./smartsheet";
 import { log } from "../vite";

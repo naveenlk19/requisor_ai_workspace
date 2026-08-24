@@ -188,7 +188,7 @@ export function parseAndValidateCitations(
   // Per-sentence breakdown (used by faithfulness verifier).
   const sentences: Array<{ sentence: string; citationNumbers: number[] }> = [];
   const rawSentences = cleaned
-    .split(/(?<=[.?!])\s+(?=[A-Z(\[])|\n+/)
+    .split(/(?<=[.?!])\s+(?=[A-Z([])|\n+/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
   for (const s of rawSentences) {

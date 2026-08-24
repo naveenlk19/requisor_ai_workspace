@@ -123,8 +123,8 @@ export function ConversationSelector({
                       </p>
                       <p className="text-slate-400 truncate mt-0.5">
                         {conv.summary
-                          ? conv.summary.substring(0, 60) + "..."
-                          : conv.content.substring(0, 60) + "..."}
+                          ? `${conv.summary.substring(0, 60)}...`
+                          : `${conv.content.substring(0, 60)}...`}
                       </p>
                     </div>
                   </button>

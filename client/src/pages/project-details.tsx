@@ -1,16 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import type React from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRoute, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  Card,
-} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
 import {
   getProject,
   pullTasksFromProvider,
@@ -20,44 +13,28 @@ import {
   processNLPTaskCommand,
 } from "@/lib/api";
 import { ProjectMembers } from "@/components/projects/ProjectMembers";
-import { IntegrationProvider } from "@/types";
+import type { IntegrationProvider } from "@/types";
 import { format } from "date-fns";
 import {
   FolderOpen,
-  Calendar,
-  BarChart2,
-  RefreshCcw,
   Plus,
   ListTodo,
   Kanban,
-  ToggleLeft,
-  Cpu,
   Check,
   X,
   Edit,
   Trash2,
   Milestone,
 } from "lucide-react";
-import { TaskList } from "@/components/tasks/TaskList";
-import { TaskDetailsWithRecommendations } from "@/components/tasks/TaskDetailsWithRecommendations";
-import { TaskListEnhanced } from "@/components/tasks/TaskListEnhanced";
-import { CollapsibleAIRecommendations } from "@/components/tasks/CollapsibleAIRecommendations";
 // import { MilestonesTab } from "@/components/projects/MilestonesTab";
 import { TimelineCalendar } from "@/components/projects/TimelineCalendar";
-import {
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
-} from "@/components/ui/resizable";
 import { KanbanBoard } from "@/components/tasks/KanbanBoard";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import { SyncActions } from "@/components/tasks/SyncActions";
 import { ProjectAnalysis } from "@/components/projects/ProjectAnalysis";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Project } from "@shared/schema";
+import type { Project } from "@shared/schema";
 import TaskCreator from "@/components/projects/TaskCreator";
 // import MilestoneCreator from "@/components/projects/MilestoneCreator";
 import { EnhancedTaskList } from "@/components/projects/EnhancedTaskList";
@@ -169,7 +146,7 @@ export default function ProjectDetails() {
 
   // Use whichever route matched
   const params = paramsProjects || paramsProject;
-  const projectId = params?.id ? parseInt(params.id) : 0;
+  const projectId = params?.id ? parseInt(params.id, 10) : 0;
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [, setLocation] = useLocation();

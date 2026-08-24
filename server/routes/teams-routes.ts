@@ -4,7 +4,7 @@ import { teamsMeetings, rawInputs } from "@shared/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { generateProjectPlan } from "../lib/openai";
 import * as teamsService from "../services/teams-service";
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 
 const router = Router();
 
@@ -150,7 +150,7 @@ router.post("/meetings", async (req: any, res) => {
     res.json(saved);
   } catch (err: any) {
     console.error("Error creating Teams meeting:", err.message);
-    res.status(500).json({ error: "Failed to create meeting: " + err.message });
+    res.status(500).json({ error: `Failed to create meeting: ${err.message}` });
   }
 });
 
@@ -237,7 +237,7 @@ router.post("/meetings/:id/fetch-transcript", async (req: any, res) => {
     let fullTranscript = "";
     for (const t of transcripts) {
       const content = await teamsService.getTranscriptContent(token, meeting.meetingId, t.id);
-      fullTranscript += content + "\n\n";
+      fullTranscript += `${content}\n\n`;
     }
 
     fullTranscript = fullTranscript.trim();
@@ -265,7 +265,7 @@ router.post("/meetings/:id/fetch-transcript", async (req: any, res) => {
     res.json(updated);
   } catch (err: any) {
     console.error("Error fetching transcript:", err.message);
-    res.status(500).json({ error: "Failed to fetch transcript: " + err.message });
+    res.status(500).json({ error: `Failed to fetch transcript: ${err.message}` });
   }
 });
 
@@ -352,7 +352,7 @@ Analyze the discussion, identify action items, decisions made, key topics, and c
     res.json({ meeting: updated, plan });
   } catch (err: any) {
     console.error("Error generating plan:", err.message);
-    res.status(500).json({ error: "Failed to generate project plan: " + err.message });
+    res.status(500).json({ error: `Failed to generate project plan: ${err.message}` });
   }
 });
 

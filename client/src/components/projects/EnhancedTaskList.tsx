@@ -641,8 +641,8 @@ export function EnhancedTaskList({
         {/* Rows */}
         <div className="divide-y divide-slate-100">
           {sortedTasks.map((task) => {
-            const sc = statusConfig[task.status] || statusConfig["todo"];
-            const pc = priorityConfig[task.priority] || priorityConfig["medium"];
+            const sc = statusConfig[task.status] || statusConfig.todo;
+            const pc = priorityConfig[task.priority] || priorityConfig.medium;
             const due = dueDateDisplay(task.dueDate);
             const assignee = task.assigneeId
               ? teamMembers.find((m) => m.id === task.assigneeId)

@@ -111,7 +111,7 @@ function CitationBlock({
       {source.quote ? (
         <div className="text-xs italic text-emerald-900 dark:text-emerald-200 mt-0.5">
           <Quote className="h-3 w-3 inline mr-1 -mt-0.5 text-emerald-600" />
-          "{source.quote.length > 220 ? source.quote.slice(0, 220) + "…" : source.quote}"
+          "{source.quote.length > 220 ? `${source.quote.slice(0, 220)}…` : source.quote}"
         </div>
       ) : (
         <div className="text-[11px] text-muted-foreground italic mt-0.5">

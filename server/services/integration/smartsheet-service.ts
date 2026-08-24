@@ -1,7 +1,7 @@
 import axios from 'axios';
 import querystring from 'querystring';
 import { IntegrationProvider } from '@shared/integrations';
-import { BaseIntegrationService, ProjectData, SyncResult, TaskData } from './base-integration';
+import { BaseIntegrationService, type ProjectData, type SyncResult, type TaskData } from './base-integration';
 import { storage } from '../../storage';
 import { config } from '../../config/environment';
 
@@ -509,7 +509,7 @@ export class SmartsheetService extends BaseIntegrationService {
               value: task.description || '',
             });
             break;
-          case 'Status':
+          case 'Status': {
             // Map our status to Smartsheet status
             let status = 'To Do';
             if (task.status === 'done' || task.isCompleted) {
@@ -522,6 +522,7 @@ export class SmartsheetService extends BaseIntegrationService {
               value: status,
             });
             break;
+          }
           case 'Due Date':
             if (task.dueDate) {
               cells.push({
@@ -531,7 +532,7 @@ export class SmartsheetService extends BaseIntegrationService {
               });
             }
             break;
-          case 'Priority':
+          case 'Priority': {
             // Map our priority to Smartsheet priority
             let priority = 'Medium';
             if (task.priority === 'high') {
@@ -544,6 +545,7 @@ export class SmartsheetService extends BaseIntegrationService {
               value: priority,
             });
             break;
+          }
         }
       }
 

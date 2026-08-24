@@ -1,4 +1,4 @@
-import { ChatMessage } from "@shared/ai-types";
+
 
 // Memory structure for each planning session
 export interface PlannerMemory {

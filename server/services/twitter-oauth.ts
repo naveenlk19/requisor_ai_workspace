@@ -1,8 +1,7 @@
 import axios from "axios";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { logger } from "./logger";
 import { config } from "../config/environment";
-import FormData from "form-data";
 
 interface TwitterTokenData {
   access_token: string;
@@ -86,7 +85,7 @@ export class TwitterOAuthService {
       "Generated Twitter auth URL with media.write scope",
       {
         redirectUri,
-        state: state.substring(0, 8) + "...",
+        state: `${state.substring(0, 8)}...`,
         scopes: "tweet.read tweet.write users.read media.write offline.access",
       },
     );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Card,
@@ -33,7 +33,6 @@ import { apiRequest } from "@/lib/queryClient";
 import {
   ArrowLeft,
   CheckCircle2,
-  CloudUpload,
   Hash,
   Layers,
   Loader2,
@@ -100,7 +99,7 @@ export default function JiraBacklogGenerator() {
       const savedResults = [];
       for (const story of stories) {
         const result = await apiRequest("/api/jira/stories", "POST", {
-          projectId: parseInt(selectedProject),
+          projectId: parseInt(selectedProject, 10),
           ...story,
         });
         savedResults.push(result);
@@ -167,7 +166,7 @@ export default function JiraBacklogGenerator() {
     generateBacklog.mutate({
       feature: featureDescription,
       context: additionalContext,
-      projectId: selectedProject ? parseInt(selectedProject) : undefined,
+      projectId: selectedProject ? parseInt(selectedProject, 10) : undefined,
     });
   };
 

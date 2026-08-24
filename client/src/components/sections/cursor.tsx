@@ -18,9 +18,7 @@ const useCanvasCursor = () => {
         (e = this.offset + Math.sin(this.phase) * this.amplitude)
       );
     },
-    value: function () {
-      return e;
-    },
+    value: () => e,
   };
 
   function Line(e) {
@@ -111,7 +109,7 @@ const useCanvasCursor = () => {
       ctx.globalCompositeOperation = 'source-over';
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       ctx.globalCompositeOperation = 'lighter';
-      ctx.strokeStyle = 'hsla(' + Math.round(f.update()) + ',50%,50%,0.2)';
+      ctx.strokeStyle = `hsla(${Math.round(f.update())},50%,50%,0.2)`;
       ctx.lineWidth = 1;
       for (var e, t = 0; t < E.trails; t++) {
         (e = lines[t]).update();
@@ -147,7 +145,7 @@ const useCanvasCursor = () => {
     this.vx = 0;
   }
 
-  const renderCanvas = function () {
+  const renderCanvas = () => {
     ctx = document.getElementById('canvas').getContext('2d');
     ctx.running = true;
     ctx.frame = 1;

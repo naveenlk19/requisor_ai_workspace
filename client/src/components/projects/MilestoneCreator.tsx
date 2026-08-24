@@ -1,9 +1,9 @@
-import React from 'react';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createTask, NewTask } from '@/lib/api';
+import { createTask, type NewTask } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { CalendarIcon, Plus } from 'lucide-react';
 import { format } from 'date-fns';
@@ -11,7 +11,6 @@ import { format } from 'date-fns';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,7 +23,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';

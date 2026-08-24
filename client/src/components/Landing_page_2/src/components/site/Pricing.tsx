@@ -1,6 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
-import PartnerSlider from "@/components/site/PartnerSlider";
+
 export default function Pricing() {
   return (
     <section className="md:py-24 py-12 dark:bg-[#0F172A] relative overflow-hidden " id="pricing">

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import { logger } from './logger';
 import { config } from '../config/environment';
 
@@ -62,7 +62,7 @@ export class MastodonOAuthService {
       this.apps.set(cacheKey, app);
       
       logger.info('backend', `Successfully registered Mastodon app for ${instance}`, {
-        client_id: app.client_id.substring(0, 8) + '...'
+        client_id: `${app.client_id.substring(0, 8)}...`
       });
 
       return app;
@@ -93,7 +93,7 @@ export class MastodonOAuthService {
     const authUrl = `https://${instance}/oauth/authorize?${params.toString()}`;
     
     logger.info('backend', `Generated Mastodon auth URL for ${instance}`, {
-      state: state.substring(0, 8) + '...'
+      state: `${state.substring(0, 8)}...`
     });
 
     return authUrl;
@@ -179,7 +179,7 @@ export class MastodonOAuthService {
     });
 
     try {
-      let mediaIds: string[] = [];
+      const mediaIds: string[] = [];
 
       // Upload media files if provided
       if (mediaFiles && mediaFiles.length > 0) {
@@ -213,7 +213,7 @@ export class MastodonOAuthService {
       }
 
       logger.info('backend', `About to post status to ${instance}`, {
-        statusData: { ...statusData, status: content.substring(0, 50) + '...' },
+        statusData: { ...statusData, status: `${content.substring(0, 50)}...` },
         hasToken: !!accessToken
       });
 
@@ -251,7 +251,7 @@ export class MastodonOAuthService {
         
         logger.info('backend', `Post verified successfully on ${instance}`, {
           statusId: response.data.id,
-          verifiedContent: verifyResponse.data.content?.substring(0, 50) + '...'
+          verifiedContent: `${verifyResponse.data.content?.substring(0, 50)}...`
         });
       } catch (verifyError: any) {
         logger.warn('backend', `Could not verify post on ${instance}`, {

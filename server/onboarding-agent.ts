@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import { storage } from './storage';
 import { trackTokenUsage, getModelForBudget } from './services/token-tracker';
-import type { InsertOnboardingPlan, InsertOnboardingStep, OnboardingPlan, OnboardingStep } from "@shared/schema";
+import type { InsertOnboardingPlan, InsertOnboardingStep, OnboardingPlan, } from "@shared/schema";
 
 interface OnboardingRequest {
   type: 'employee' | 'client' | 'contractor';

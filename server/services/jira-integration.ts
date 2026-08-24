@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { DatabaseStorage } from "../database-storage";
-import { JiraIntegration, UserStory } from "@shared/schema";
+import type { JiraIntegration, } from "@shared/schema";
 
 const storage = new DatabaseStorage();
 
@@ -311,7 +311,7 @@ export class JiraIntegrationService {
               jiraKey: storyData.key,
             });
           } catch (err: any) {
-            errors.push(`Story \"${story.title}\" failed: ${err.message}`);
+            errors.push(`Story "${story.title}" failed: ${err.message}`);
           }
         }
       } catch (err: any) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -426,7 +426,7 @@ export function EnhancedAgileCanvas({
                                       onChange={(e) =>
                                         handleStoryEdit(story.id, {
                                           storyPoints:
-                                            parseInt(e.target.value) ||
+                                            parseInt(e.target.value, 10) ||
                                             undefined,
                                         })
                                       }

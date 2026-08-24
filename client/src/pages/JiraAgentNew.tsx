@@ -16,7 +16,6 @@ import {
   ArrowLeft, 
   CheckCircle2, 
   CloudUpload, 
-  Copy, 
   Edit2, 
   ExternalLink, 
   FileText, 
@@ -84,7 +83,7 @@ export default function JiraAgentNew() {
   // Fetch user stories for selected project
   const { data: userStories = [], isLoading: isLoadingStories } = useQuery({
     queryKey: [`/api/jira/stories/${selectedProject}`],
-    enabled: !!selectedProject && selectedProject !== '' && !isNaN(parseInt(selectedProject))
+    enabled: !!selectedProject && selectedProject !== '' && !isNaN(parseInt(selectedProject, 10))
   });
 
   // Fetch JIRA projects
@@ -190,7 +189,7 @@ export default function JiraAgentNew() {
           {/* Story Writer Tab */}
           <TabsContent value="story-writer" className="space-y-6">
             <StoryWriter 
-              projectId={selectedProject && !isNaN(parseInt(selectedProject)) ? parseInt(selectedProject) : null}
+              projectId={selectedProject && !isNaN(parseInt(selectedProject, 10)) ? parseInt(selectedProject, 10) : null}
               jiraIntegration={jiraIntegration}
               jiraProjects={jiraProjects}
             />
@@ -199,7 +198,7 @@ export default function JiraAgentNew() {
           {/* Backlog Generator Tab */}
           <TabsContent value="backlog" className="space-y-6">
             <BacklogGenerator 
-              projectId={selectedProject && !isNaN(parseInt(selectedProject)) ? parseInt(selectedProject) : null}
+              projectId={selectedProject && !isNaN(parseInt(selectedProject, 10)) ? parseInt(selectedProject, 10) : null}
               jiraIntegration={jiraIntegration}
               jiraProjects={jiraProjects}
             />
@@ -208,7 +207,7 @@ export default function JiraAgentNew() {
           {/* Stories Management Tab */}
           <TabsContent value="stories" className="space-y-6">
             <StoriesManager 
-              projectId={selectedProject && !isNaN(parseInt(selectedProject)) ? parseInt(selectedProject) : null}
+              projectId={selectedProject && !isNaN(parseInt(selectedProject, 10)) ? parseInt(selectedProject, 10) : null}
               userStories={userStories}
               jiraIntegration={jiraIntegration}
               jiraProjects={jiraProjects}

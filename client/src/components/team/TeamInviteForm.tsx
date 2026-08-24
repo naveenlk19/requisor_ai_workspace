@@ -1,4 +1,4 @@
-import React from "react";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -32,11 +32,10 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Mail, Users } from "lucide-react";
+import { Mail, } from "lucide-react";
 
 // Create schema for the form
 const inviteFormSchema = z.object({
@@ -79,15 +78,15 @@ export function TeamInviteForm({
   // Fetch project members when a project is selected
   const { data: projectMembers = [] } = useQuery({
     queryKey: [`/api/projects/${selectedProjectId}/members`],
-    queryFn: () => getProjectMembers(parseInt(selectedProjectId)),
-    enabled: !!selectedProjectId && !isNaN(parseInt(selectedProjectId)),
+    queryFn: () => getProjectMembers(parseInt(selectedProjectId, 10)),
+    enabled: !!selectedProjectId && !isNaN(parseInt(selectedProjectId, 10)),
   });
 
   // Fetch project invitations when a project is selected
   const { data: projectInvitations = [] } = useQuery({
     queryKey: [`/api/projects/${selectedProjectId}/invitations`],
-    queryFn: () => getProjectInvitations(parseInt(selectedProjectId)),
-    enabled: !!selectedProjectId && !isNaN(parseInt(selectedProjectId)),
+    queryFn: () => getProjectInvitations(parseInt(selectedProjectId, 10)),
+    enabled: !!selectedProjectId && !isNaN(parseInt(selectedProjectId, 10)),
   });
 
   // Create invitation mutation
@@ -119,7 +118,7 @@ export function TeamInviteForm({
         );
       }
 
-      return createProjectInvitation(parseInt(values.projectId), {
+      return createProjectInvitation(parseInt(values.projectId, 10), {
         email: values.email,
         role: values.role as ProjectRole,
       });

@@ -236,7 +236,7 @@ async function generateSlides(
     content: {
       html: `
         <div style="width: 100%; height: 100%; display: flex; flex-direction: column; background-color: ${template.bgColor}; color: ${template.textColor}; font-family: ${template.fontFamily}; padding: 60px;">
-          <h2 style="font-size: ${parseInt(template.fontSize) - 8}px; margin-bottom: 40px;">Ingredients</h2>
+          <h2 style="font-size: ${parseInt(template.fontSize, 10) - 8}px; margin-bottom: 40px;">Ingredients</h2>
           <ul style="font-size: 20px; list-style: none; padding: 0;">
             ${ingredientsList}
           </ul>
@@ -262,7 +262,7 @@ async function generateSlides(
       content: {
         html: `
           <div style="width: 100%; height: 100%; display: flex; flex-direction: column; background-color: ${template.bgColor}; color: ${template.textColor}; font-family: ${template.fontFamily}; padding: 60px;">
-            <h2 style="font-size: ${parseInt(template.fontSize) - 8}px; margin-bottom: 40px;">Instructions</h2>
+            <h2 style="font-size: ${parseInt(template.fontSize, 10) - 8}px; margin-bottom: 40px;">Instructions</h2>
             ${stepsHtml}
           </div>
         `,
@@ -278,7 +278,7 @@ async function generateSlides(
       content: {
         html: `
           <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: ${template.bgColor}; color: ${template.textColor}; font-family: ${template.fontFamily}; text-align: center; padding: 60px;">
-            <h2 style="font-size: ${parseInt(template.fontSize) - 8}px; margin-bottom: 40px;">Nutrition Per Serving</h2>
+            <h2 style="font-size: ${parseInt(template.fontSize, 10) - 8}px; margin-bottom: 40px;">Nutrition Per Serving</h2>
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; font-size: 24px;">
               <div>🔥 ${recipe.nutritionInfo.calories} calories</div>
               <div>💪 ${recipe.nutritionInfo.protein}g protein</div>
@@ -355,10 +355,11 @@ export async function exportRecipe(
       return generatePDF(recipe);
     case 'html':
       return generateHTML(recipe);
-    case 'png':
+    case 'png': {
       // Create a simple PNG placeholder for now
       const pngHtml = generateHTML(recipe);
       return Buffer.from(pngHtml, 'utf-8');
+    }
     case 'mp4':
       // Create a simple placeholder
       return Buffer.from('Video export coming soon', 'utf-8');

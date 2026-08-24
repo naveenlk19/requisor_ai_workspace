@@ -6,29 +6,12 @@ import {
   ChevronRight,
   ArrowRight,
   Check,
-  PanelRight,
-  BarChart3,
-  Calendar,
-  PlusCircle,
   Zap,
-  Shield,
   Menu,
-  TrendingUp,
-  Users,
-  Calculator,
-  Target,
-  Send,
   Paperclip,
   Sparkles,
   Rocket,
   FileText,
-  DollarSign,
-  Clock,
-  Bot,
-  ChefHat,
-  Upload,
-  Workflow,
-  Brain,
 } from "lucide-react";
 import { TypeAnimation } from "react-type-animation";
 
@@ -279,7 +262,7 @@ export default function LandingPage() {
                         onInput={(e) => {
                           e.currentTarget.style.height = "auto";
                           e.currentTarget.style.height =
-                            e.currentTarget.scrollHeight + "px";
+                            `${e.currentTarget.scrollHeight}px`;
                         }}
                       />
 

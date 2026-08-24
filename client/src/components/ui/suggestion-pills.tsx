@@ -4,14 +4,12 @@ import { cn } from '@/lib/utils';
 import { 
   Plus, 
   FolderOpen, 
-  Clock, 
   BarChart3, 
   Target, 
   Calendar,
   Users,
   TrendingUp,
   AlertTriangle,
-  CheckCircle
 } from 'lucide-react';
 
 interface Suggestion {

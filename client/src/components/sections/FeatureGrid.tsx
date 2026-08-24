@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wand2, KanbanSquare, Bot, CalendarClock } from "lucide-react";
+import { Wand2, KanbanSquare, Bot, } from "lucide-react";
 
 const features = [
   {

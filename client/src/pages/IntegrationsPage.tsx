@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
@@ -26,15 +26,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import {
   Clock,
-  ExternalLink,
   LogIn,
   RefreshCw,
   Download,
   Trash2,
-  CheckCircle,
-  XCircle,
 } from "lucide-react";
-import { Integration } from "@shared/schema";
+import type { Integration } from "@shared/schema";
 import { IntegrationProvider } from "@shared/integrations";
 import { Mail } from "lucide-react";
 import { SiLinear } from "react-icons/si";

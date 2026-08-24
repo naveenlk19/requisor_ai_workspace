@@ -148,8 +148,8 @@ export class EnhancedAgileAgent {
     const targets = quoted.map((q) => q.replace(/"/g, ""));
 
     // Look for epic/story references
-    const epicMatches = message.match(/epic[:\s]+([^\n,\.]+)/gi) || [];
-    const storyMatches = message.match(/story[:\s]+([^\n,\.]+)/gi) || [];
+    const epicMatches = message.match(/epic[:\s]+([^\n,.]+)/gi) || [];
+    const storyMatches = message.match(/story[:\s]+([^\n,.]+)/gi) || [];
 
     return [...targets, ...epicMatches, ...storyMatches].map((t) => t.trim());
   }
@@ -362,12 +362,12 @@ Targets: ${intent.targets.join(", ")}`;
 
     // Extract after "add story" or similar
     const afterKeyword = message.match(
-      /(?:add|create|new)\s+story[:\s]+([^\n,\.]+)/i,
+      /(?:add|create|new)\s+story[:\s]+([^\n,.]+)/i,
     );
     if (afterKeyword) return afterKeyword[1].trim();
 
     // Fallback
-    return message.length > 50 ? message.substring(0, 47) + "..." : message;
+    return message.length > 50 ? `${message.substring(0, 47)}...` : message;
   }
 
   private extractEpicName(message: string): string {
@@ -375,11 +375,11 @@ Targets: ${intent.targets.join(", ")}`;
     if (quoted) return quoted[1];
 
     const afterKeyword = message.match(
-      /(?:add|create|new)\s+epic[:\s]+([^\n,\.]+)/i,
+      /(?:add|create|new)\s+epic[:\s]+([^\n,.]+)/i,
     );
     if (afterKeyword) return afterKeyword[1].trim();
 
-    return message.length > 30 ? message.substring(0, 27) + "..." : message;
+    return message.length > 30 ? `${message.substring(0, 27)}...` : message;
   }
 
   // Apply canvas updates based on agent actions

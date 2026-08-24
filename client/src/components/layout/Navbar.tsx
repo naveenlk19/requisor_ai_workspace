@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
@@ -7,13 +6,6 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import baffle from "baffle";
 import { useAuth } from "@/hooks/useAuth.tsx";
 import { useLocation } from "wouter";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useInView } from "framer-motion";
 
 import logo from "@assets/Group_185_1764797140461.png";
 

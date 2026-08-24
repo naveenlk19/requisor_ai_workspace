@@ -26,8 +26,8 @@ if (process.env.SENTRY_DSN) {
         delete event.request.data;
         delete event.request.cookies;
         if (event.request.headers) {
-          delete event.request.headers["authorization"];
-          delete event.request.headers["cookie"];
+          delete event.request.headers.authorization;
+          delete event.request.headers.cookie;
           delete (event.request.headers as any)["x-api-key"];
         }
       }

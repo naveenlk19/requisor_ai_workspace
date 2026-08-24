@@ -1,7 +1,7 @@
 import axios from 'axios';
 import querystring from 'querystring';
 import { IntegrationProvider } from '@shared/integrations';
-import { BaseIntegrationService, ProjectData, SyncResult, TaskData } from './base-integration';
+import { BaseIntegrationService, type ProjectData, type SyncResult, type TaskData } from './base-integration';
 import { storage } from '../../storage';
 import { config } from '../../config/environment';
 

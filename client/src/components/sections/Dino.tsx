@@ -1,6 +1,5 @@
 
-import { motion, useInView } from "framer-motion";
-import React, { useRef, useState, useEffect } from "react";
+import { motion, } from "framer-motion";
 import { useLocation } from "wouter";
 const agents = [
   {

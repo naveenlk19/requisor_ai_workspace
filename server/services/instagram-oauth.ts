@@ -1,6 +1,5 @@
 import axios from "axios";
 import { logger } from "./logger";
-import { config } from "../config/environment";
 
 interface InstagramUserData {
   id: string;

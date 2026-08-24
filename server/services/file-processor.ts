@@ -1,8 +1,6 @@
 import { OpenAI } from "openai";
-import fs from "fs/promises";
-import path from "path";
+import fs from "node:fs/promises";
 import * as csv from "csv-parse/sync";
-import { existsSync } from "fs";
 import { trackTokenUsage } from "./token-tracker";
 import { parseSrt, type ParseSrtOptions } from "./srt-parser";
 import {

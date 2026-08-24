@@ -1,19 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useState, useRef, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -23,7 +19,6 @@ import {
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import {
   Brain,
@@ -33,20 +28,15 @@ import {
   Download,
   Copy,
   Loader2,
-  CheckCircle,
   AlertCircle,
   Layers,
   Target,
-  Calendar,
   Users,
   Database,
   Shield,
-  Package,
-  GitBranch,
   TestTube,
   Server,
   Send,
-  Settings,
   MessageSquare,
   Lightbulb,
   Zap,
@@ -58,7 +48,6 @@ import {
   Globe,
   Gamepad2,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { ProjectPlannerCanvasV2 } from "@/components/project-planner/ProjectPlannerCanvasV2";

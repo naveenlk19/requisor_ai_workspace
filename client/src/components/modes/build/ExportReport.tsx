@@ -265,7 +265,7 @@ export function ExportReport({ candidates, open, onOpenChange }: ExportReportPro
         sorted.forEach((c, i) => {
           checkPage(6);
           const rank = (c.priorityRank ?? i + 1).toString();
-          const title = c.featureTitle.length > 30 ? c.featureTitle.slice(0, 28) + "…" : c.featureTitle;
+          const title = c.featureTitle.length > 30 ? `${c.featureTitle.slice(0, 28)}…` : c.featureTitle;
           const cat = c.impactScore != null && c.effortScore != null
             ? getQuadrantLabel(c.impactScore, c.effortScore)
             : "—";

@@ -4,7 +4,6 @@ import { mastodonOAuth } from "../services/mastodon-oauth";
 import { DatabaseStorage } from "../database-storage";
 import { nanoid } from "nanoid";
 import { logger } from "../services/logger";
-import { isAuthenticated } from "../auth";
 import { config } from "../config/environment";
 
 // Configure multer for file uploads (memory storage for Mastodon uploads)
@@ -310,7 +309,7 @@ router.post('/mastodon/publish', upload.array('media', 10), async (req: any, res
     // enforce 500 chars
     const MASTODON_CHAR_LIMIT = 500;
     const text = content.length > MASTODON_CHAR_LIMIT
-      ? content.slice(0, MASTODON_CHAR_LIMIT - 3) + '...'
+      ? `${content.slice(0, MASTODON_CHAR_LIMIT - 3)}...`
       : content;
 
     // collect media buffers
@@ -362,7 +361,7 @@ router.post('/mastodon/publish', upload.array('media', 10), async (req: any, res
 
     res.json({ success: true, result: { id: result.id, url: result.url, created_at: result.created_at } });
   } catch (e: any) {
-    res.status(500).json({ success: false, error: 'Failed to publish to Mastodon: ' + e.message });
+    res.status(500).json({ success: false, error: `Failed to publish to Mastodon: ${e.message}` });
   }
 });
 

@@ -1,6 +1,5 @@
 import { db } from "./db";
 import { sql } from "drizzle-orm";
-import * as schema from "@shared/schema";
 
 export async function setupDatabase() {
   try {

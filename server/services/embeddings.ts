@@ -516,7 +516,7 @@ async function extractAttachmentText(
     text = parts.join("\n\n") || null;
   } else if (isPptx) {
     try {
-      // @ts-ignore — pptx2json ships no type declarations
+      // @ts-expect-error — pptx2json ships no type declarations
       const pptx2json = (await import("pptx2json")).default as any;
       const parsed = await pptx2json(buf);
       const slides = Array.isArray(parsed?.slides) ? parsed.slides : [];

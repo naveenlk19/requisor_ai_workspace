@@ -291,7 +291,7 @@ export class CronScheduler {
         generatedContent = generatedContent.substring(0, 500);
         logger.info("backend", "Trimmed Mastodon content to 500 characters");
       } else if (platformLower === "twitter" && generatedContent.length > 280) {
-        generatedContent = generatedContent.substring(0, 277) + "...";
+        generatedContent = `${generatedContent.substring(0, 277)}...`;
         logger.info("backend", "Trimmed Twitter content to 280 characters");
       }
 
@@ -353,7 +353,7 @@ export class CronScheduler {
       : `https://${scheduledPost.credentials.mastodon_instance || "mastodon.social"}`;
 
     // Handle media uploads if present
-    let mediaIds: string[] = [];
+    const mediaIds: string[] = [];
     if (scheduledPost.mediaUrls && scheduledPost.mediaUrls.length > 0) {
       for (const mediaUrl of scheduledPost.mediaUrls) {
         try {

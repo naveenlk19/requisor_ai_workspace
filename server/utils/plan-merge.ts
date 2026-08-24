@@ -136,7 +136,7 @@ export function mergePlans(
     console.log(`📊 Server ID Preservation Check (adjusted for intentional removals):`);
     console.log(`  Original milestones: ${checkExistingMilestones.length}, After removing combined: ${adjustedExistingMilestones.length}`);
     console.log(`  Milestones: ${preservedMilestones.length}/${baseCount} (${(milestonePreservationRate * 100).toFixed(0)}%)`);
-    console.log(`  Tasks: ${preservedTaskCount}/${allExistingTasks.length} (${allExistingTasks.length === 0 ? 'N/A' : (taskPreservationRate * 100).toFixed(0) + '%'})`);
+    console.log(`  Tasks: ${preservedTaskCount}/${allExistingTasks.length} (${allExistingTasks.length === 0 ? 'N/A' : `${(taskPreservationRate * 100).toFixed(0)}%`})`);
     
     if (!isNaN(milestonePreservationRate) && milestonePreservationRate >= threshold && taskPreservationRate >= threshold) {
       console.log(`✅ Server: IDs preserved above threshold`);

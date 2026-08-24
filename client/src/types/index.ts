@@ -1,4 +1,4 @@
-import { Project, Task, Integration, User, Insight } from "@shared/schema";
+import type { Project, Task, User, Insight } from "@shared/schema";
 
 // Extend types with UI-specific properties if needed
 export interface ProjectWithProgress extends Project {

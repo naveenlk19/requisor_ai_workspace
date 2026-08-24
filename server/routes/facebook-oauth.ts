@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { DatabaseStorage } from "../database-storage";
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 const router = Router();
 const storage = new DatabaseStorage();

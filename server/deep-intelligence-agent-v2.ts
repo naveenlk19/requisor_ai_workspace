@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { format, addDays, addWeeks } from "date-fns";
-import { PlannerMemoryManager, ProjectContext } from "./project-planner-memory";
+import { PlannerMemoryManager, type ProjectContext } from "./project-planner-memory";
 import { trackTokenUsage, getModelForBudget } from "./services/token-tracker";
 
 const openai = new OpenAI({
@@ -23,7 +23,7 @@ class DeepProjectPlannerAgent {
     console.log(`Deep planner processing message with sessionId: ${sessionId}`);
     console.log(
       `Available sessions in memory:`,
-      Array.from(this.memoryManager["memories"].keys()),
+      Array.from(this.memoryManager.memories.keys()),
     );
 
     const session = this.memoryManager.getSession(sessionId);
@@ -136,7 +136,7 @@ class DeepProjectPlannerAgent {
         try {
           if (pattern === datePatterns[0]) {
             // "10 dec", "7th Dec" format - day month
-            const day = parseInt(match[1]);
+            const day = parseInt(match[1], 10);
             const monthStr = match[2].toLowerCase();
             const month = this.parseMonth(monthStr);
             if (month !== -1) {
@@ -152,7 +152,7 @@ class DeepProjectPlannerAgent {
           } else if (pattern === datePatterns[1]) {
             // "Dec 7", "dec 10" format - month day
             const monthStr = match[1].toLowerCase();
-            const day = parseInt(match[2]);
+            const day = parseInt(match[2], 10);
             const month = this.parseMonth(monthStr);
             if (month !== -1) {
               targetDate = new Date(currentYear, month, day);
@@ -214,7 +214,7 @@ class DeepProjectPlannerAgent {
       // Fallback: Extract duration mentions like "4 weeks", "2 months"
       const timelineMatch = content.match(/(\d+)\s*(week|month|day)s?/i);
       if (timelineMatch) {
-        const duration = parseInt(timelineMatch[1]);
+        const duration = parseInt(timelineMatch[1], 10);
         const unit = timelineMatch[2].toLowerCase();
         const startDate = new Date();
         let endDate = new Date();
@@ -244,7 +244,7 @@ class DeepProjectPlannerAgent {
     // Extract team size
     const teamMatch = content.match(/(\d+)\s*(person|people|team member)s?/i);
     if (teamMatch) {
-      info.teamSize = parseInt(teamMatch[1]);
+      info.teamSize = parseInt(teamMatch[1], 10);
     }
 
     // Detect project type

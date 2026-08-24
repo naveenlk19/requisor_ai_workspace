@@ -13,19 +13,15 @@ import {
   DollarSign, 
   Target, 
   Calendar,
-  ChevronRight,
   AlertCircle,
   CheckCircle2,
   Clock,
   Users,
   Zap,
-  BarChart3,
   Brain,
   Sparkles,
   RefreshCw,
-  Download,
   Filter,
-  TrendingDown,
   ArrowUp,
   ArrowDown,
   Edit2,
@@ -878,7 +874,7 @@ export default function RgaAssistantEnhanced() {
                     type="number"
                     value={settings?.targetRgaPercentage}
                     onChange={(e) => updateSettingsMutation.mutate({ 
-                      targetRgaPercentage: parseInt(e.target.value) 
+                      targetRgaPercentage: parseInt(e.target.value, 10) 
                     })}
                     className="w-24"
                     min="0"
@@ -895,7 +891,7 @@ export default function RgaAssistantEnhanced() {
                     type="number"
                     value={settings?.weeklyCustomerHours}
                     onChange={(e) => updateSettingsMutation.mutate({ 
-                      weeklyCustomerHours: parseInt(e.target.value) 
+                      weeklyCustomerHours: parseInt(e.target.value, 10) 
                     })}
                     className="w-24"
                     min="0"

@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Task, ToolStatus } from '@shared/schema';
+import { useEffect } from 'react';
+import { type Task, ToolStatus } from '@shared/schema';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ExternalLink, RefreshCw, ThumbsUp, CheckCircle2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { getToolRecommendations, analyzeTask, updateToolStatus } from '@/lib/api';

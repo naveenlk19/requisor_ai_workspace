@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 import type { DiarizedUtterance, SpeakerMap } from "@shared/schema";
 
 const API_BASE = "https://api.assemblyai.com/v2";

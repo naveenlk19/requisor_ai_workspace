@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import {
   Card,
@@ -27,11 +27,8 @@ import {
   Layers,
   Loader2,
   PenTool,
-  Plus,
-  Save,
   Sparkles,
   Target,
-  Trash2,
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 

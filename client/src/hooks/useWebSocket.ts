@@ -76,7 +76,7 @@ export function useWebSocket(enabled: boolean = true) {
       ws.current.onclose = () => {
         console.log('WebSocket disconnected');
         // Attempt to reconnect with exponential backoff
-        const delay = Math.min(1000 * Math.pow(2, reconnectAttempts.current), 30000);
+        const delay = Math.min(1000 * 2 ** reconnectAttempts.current, 30000);
         reconnectAttempts.current += 1;
         
         if (reconnectTimeoutRef.current) {

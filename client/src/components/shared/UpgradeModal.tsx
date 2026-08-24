@@ -11,9 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
   Rocket,
-  Zap,
   Shield,
-  Users,
   FolderKanban,
   Cpu,
   Check,

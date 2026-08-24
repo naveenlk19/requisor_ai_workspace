@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { Task } from '@shared/schema';
+import { useState } from 'react';
+import type { Task } from '@shared/schema';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ChevronLeft, ChevronRight, X, Sparkles, ExternalLink, Star, Clock, TrendingUp } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Sparkles, } from 'lucide-react';
 import { TaskRecommendationsSidebar } from './TaskRecommendationsSidebar';
 import { cn } from '@/lib/utils';
 

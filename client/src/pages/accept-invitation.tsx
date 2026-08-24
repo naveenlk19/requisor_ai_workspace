@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useRoute } from 'wouter';
+import { useEffect, useState } from 'react';
+import { useLocation, } from 'wouter';
 import { useMutation } from '@tanstack/react-query';
 import { acceptInvitation } from '@/lib/api';
 import { Button } from '@/components/ui/button';

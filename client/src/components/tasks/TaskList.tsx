@@ -1,22 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Task } from "@shared/schema";
+import type { Task } from "@shared/schema";
 import { getProjectTasks, updateTask, deleteTask } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TaskSyncActions } from "./TaskSyncActions";
-import { SubtaskList } from "./SubtaskList";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Select,
   SelectContent,
@@ -40,7 +33,6 @@ import {
   Edit,
   Save,
   X,
-  Calendar as CalendarIcon,
   Flag,
   Trash2,
 } from "lucide-react";

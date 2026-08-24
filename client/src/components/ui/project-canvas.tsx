@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { 
@@ -296,7 +295,7 @@ export function ProjectCanvas({ projectPlan, onSave, onEdit, className }: Projec
                               <Input
                                 type="number"
                                 value={editedPlan.tasks[index]?.estimatedHours || ''}
-                                onChange={(e) => updateTask(index, 'estimatedHours', parseInt(e.target.value) || 0)}
+                                onChange={(e) => updateTask(index, 'estimatedHours', parseInt(e.target.value, 10) || 0)}
                                 className="h-5 text-xs w-12"
                                 min="0"
                               />

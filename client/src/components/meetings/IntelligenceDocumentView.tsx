@@ -118,7 +118,7 @@ function ItemRow({
             </div>
             <div className="text-xs italic text-emerald-900 dark:text-emerald-200 mt-0.5">
               <Quote className="h-3 w-3 inline mr-1 -mt-0.5 text-emerald-600" />
-              "{quote!.length > 240 ? quote!.slice(0, 240) + "…" : quote}"
+              "{quote!.length > 240 ? `${quote!.slice(0, 240)}…` : quote}"
             </div>
             <button
               type="button"
@@ -446,7 +446,7 @@ function FragmentRows({
               <div className="text-xs italic text-emerald-900 dark:text-emerald-200 mt-0.5">
                 <Quote className="h-3 w-3 inline mr-1 -mt-0.5 text-emerald-600" />
                 "{a.source_quote!.length > 280
-                  ? a.source_quote!.slice(0, 280) + "…"
+                  ? `${a.source_quote!.slice(0, 280)}…`
                   : a.source_quote}"
               </div>
               <button

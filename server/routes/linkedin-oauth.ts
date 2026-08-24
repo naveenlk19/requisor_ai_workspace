@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { DatabaseStorage } from "../database-storage";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import axios from "axios";
 
 const router = Router();

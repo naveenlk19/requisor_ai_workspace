@@ -1,18 +1,14 @@
 import express, { type Express } from "express";
-import { createServer, type Server } from "http";
 import { DatabaseStorage } from "./database-storage";
-import { WebSocketServer, WebSocket } from "ws";
 import multer from "multer";
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
 import mime from "mime-types";
 import { config } from "./config/environment";
-import teamsRoutes from "./routes/teams-routes";
 import { db, pool } from "./db";
 import {
   projects,
   tasks,
-  socialMediaAccounts,
   evidenceItems,
   featureCandidates,
   users,
@@ -147,21 +143,16 @@ async function findOrBumpEvidence(
   return { match: { ...match, mentionCount: newCount } };
 }
 
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 import { z } from "zod";
 import {
   insertProjectSchema,
   insertTaskSchema,
   insertIntegrationSchema,
   insertInsightSchema,
-  insertKanbanColumnSchema,
-  insertProjectInvitationSchema,
   insertTeamMemberSchema,
-  insertSmartTaskAssignmentSchema,
-  insertCapacityAlertSchema,
   ProjectRole,
   ToolStatus,
-  insertSocialMediaAccountSchema,
   insertSocialMediaGoalSchema,
   insertSocialMediaBrandProfileSchema,
   insertSocialMediaPostSchema,
@@ -205,7 +196,6 @@ import {
 } from "./services/conversation-parsers";
 import {
   analyzeTask,
-  getToolRecommendationsForTask,
   updateToolRecommendationStatus,
 } from "./lib/task-analysis";
 import twitterOAuthRoutes from "./routes/twitter-oauth";
@@ -227,7 +217,6 @@ import facebookSocialRoutes from "./routes/facebook-social";
 import linkedinOAuthRoutes from "./routes/linkedin-oauth";
 import linkedinSocialRoutes from "./routes/linkedin-social";
 
-import { logger } from "./services/logger";
 console.log(
   "[Routes] Facebook social routes imported:",
   !!facebookSocialRoutes,
@@ -236,10 +225,6 @@ console.log(
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 import {
   logService,
-  logCrewAI,
-  logProduction,
-  logHealth,
-  logNode,
 } from "./services/log-service";
 import logRoutes from "./routes/log-routes";
 // Clean AI agent imports
@@ -248,9 +233,7 @@ import logRoutes from "./routes/log-routes";
 import { jiraAgent } from "./services/jira-agent";
 import { jiraIntegration } from "./services/jira-integration";
 import { jiraService } from "./services/jira-service";
-import type { JiraIntegration, UserStory } from "@shared/schema";
-import { IntegrationProvider } from "@shared/integrations";
-import { createIntegrationService } from "./services/integration";
+import type { UserStory } from "@shared/schema";
 import { performIntegrationExport } from "./services/integration-export";
 import Stripe from "stripe";
 import { nlpTaskUpdater } from "./nlpPlanUpdater";
@@ -299,10 +282,10 @@ const uploadStorage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     cb(
       null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname),
+      `${file.fieldname}-${uniqueSuffix}${path.extname(file.originalname)}`,
     );
   },
 });
@@ -366,7 +349,7 @@ function naiveToUtc(naiveDatetime: string, timeZone: string): Date {
     .replace(/[Z]$/i, "")
     .replace(/[+-]\d{2}:\d{2}$/, "")
     .split(".")[0];
-  const asUtc = new Date(clean + "Z");
+  const asUtc = new Date(`${clean}Z`);
   if (isNaN(asUtc.getTime())) return new Date(naiveDatetime);
   try {
     const getOffset = (refUtc: Date): number => {
@@ -937,7 +920,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     "/api/projects/:projectId/tasks/reorder",
     isAuthenticated,
     async (req: any, res) => {
-      const projectId = parseInt(req.params.projectId);
+      const projectId = parseInt(req.params.projectId, 10);
       const { taskIds } = req.body;
 
       // Verify user has access
@@ -1645,7 +1628,7 @@ export async function registerRoutes(app: Express): Promise<void> {
         // Truncate content for Mastodon's 500 character limit
         const truncatedContent =
           generatedContent.length > 500
-            ? generatedContent.substring(0, 497) + "..."
+            ? `${generatedContent.substring(0, 497)}...`
             : generatedContent;
 
         // Ensure the Mastodon instance URL has the correct protocol
@@ -1659,7 +1642,7 @@ export async function registerRoutes(app: Express): Promise<void> {
         );
 
         // Handle media attachments if any
-        let mediaIds: string[] = [];
+        const mediaIds: string[] = [];
         const mediaUrls = Array.isArray(postToExecute.mediaUrls)
           ? postToExecute.mediaUrls
           : [];
@@ -1779,7 +1762,7 @@ export async function registerRoutes(app: Express): Promise<void> {
         // Trim content for Twitter's 280 character limit
         const twitterContent =
           generatedContent.length > 280
-            ? generatedContent.substring(0, 277) + "..."
+            ? `${generatedContent.substring(0, 277)}...`
             : generatedContent;
 
         console.log(
@@ -2152,7 +2135,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     // Test project update
     app.patch("/api/test/projects/:id", async (req, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         console.log(
           "TEST: Updating project",
           projectId,
@@ -2179,7 +2162,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     // Test task update
     app.patch("/api/test/tasks/:id", async (req, res) => {
       try {
-        const taskId = parseInt(req.params.id);
+        const taskId = parseInt(req.params.id, 10);
         console.log(
           "TEST: Updating task",
           taskId,
@@ -3165,7 +3148,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       }
       const limit = Math.min(
         500,
-        Math.max(1, parseInt(String(req.query.limit ?? "100")) || 100),
+        Math.max(1, parseInt(String(req.query.limit ?? "100"), 10) || 100),
       );
       const sinceParam = req.query.since ? new Date(String(req.query.since)) : null;
       const { sql: sqlTag } = await import("drizzle-orm");
@@ -3252,7 +3235,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       }
       const limit = Math.min(
         100,
-        Math.max(1, parseInt(String(req.query.limit ?? "20")) || 20),
+        Math.max(1, parseInt(String(req.query.limit ?? "20"), 10) || 20),
       );
       const userId = req.query.userId ? String(req.query.userId) : null;
       const { sql: sqlTag } = await import("drizzle-orm");
@@ -3506,7 +3489,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.get("/api/projects/:id", async (req: any, res) => {
     try {
-      const projectId = parseInt(req.params.id);
+      const projectId = parseInt(req.params.id, 10);
       const project = await storage.getProject(projectId);
 
       if (!project) {
@@ -3630,7 +3613,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.patch("/api/projects/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const projectId = parseInt(req.params.id);
+      const projectId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
       const project = await storage.getProject(projectId);
 
@@ -3660,7 +3643,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.delete("/api/projects/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const projectId = parseInt(req.params.id);
+      const projectId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       console.log(
@@ -3719,7 +3702,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.get("/api/projects/:id/tasks", isAuthenticated, async (req: any, res) => {
     try {
-      const projectId = parseInt(req.params.id);
+      const projectId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       console.log(
@@ -3761,7 +3744,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Check if user has access to the project
@@ -3806,7 +3789,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Check if user has access to the project
@@ -3857,7 +3840,7 @@ export async function registerRoutes(app: Express): Promise<void> {
   // Update milestone
   app.patch("/api/milestones/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const milestoneId = parseInt(req.params.id);
+      const milestoneId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       // For now, update milestone as a task
@@ -3907,7 +3890,7 @@ export async function registerRoutes(app: Express): Promise<void> {
   // Delete milestone
   app.delete("/api/milestones/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const milestoneId = parseInt(req.params.id);
+      const milestoneId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       // For now, delete milestone as a task
@@ -3941,7 +3924,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Check if user has access to the project
@@ -4004,7 +3987,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Check if user is a project owner - only owners can add members
@@ -4068,7 +4051,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const memberId = req.params.memberId;
         const userId = req.user.dbUserId || req.user.claims.sub;
         const { role } = req.body;
@@ -4114,7 +4097,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const memberId = req.params.memberId;
         const userId = req.user.dbUserId || req.user.claims.sub;
 
@@ -4165,7 +4148,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Check if user has access to the project
@@ -4193,7 +4176,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         console.log("Creating invitation with body keys:", Object.keys(req.body || {}));
@@ -4325,8 +4308,8 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
-        const invitationId = parseInt(req.params.invitationId);
+        const projectId = parseInt(req.params.id, 10);
+        const invitationId = parseInt(req.params.invitationId, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Check if user is a project owner - only owners can delete invitations
@@ -4554,7 +4537,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
       if (projectId) {
         // If projectId is specified, fetch tasks for that specific project
-        const projectIdNum = parseInt(projectId as string);
+        const projectIdNum = parseInt(projectId as string, 10);
 
         // Check if user has access to this project
         const isAuthorized = await storage.isUserAuthorized(
@@ -4732,7 +4715,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.patch("/api/tasks/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const taskId = parseInt(req.params.id);
+      const taskId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       console.log(
@@ -4871,7 +4854,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.delete("/api/tasks/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const taskId = parseInt(req.params.id);
+      const taskId = parseInt(req.params.id, 10);
       if (isNaN(taskId)) {
         return res.status(400).json({ message: "Invalid task ID" });
       }
@@ -4918,7 +4901,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Check if user has access to the project
@@ -4945,7 +4928,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Check if user has access to update the project
@@ -4976,7 +4959,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const columnId = parseInt(req.params.id);
+        const columnId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Get the column to check project permissions
@@ -6053,7 +6036,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const columnId = parseInt(req.params.id);
+        const columnId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Get the column to check project permissions
@@ -6103,7 +6086,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.delete("/api/integrations/:id", async (req, res) => {
     try {
-      const integrationId = parseInt(req.params.id);
+      const integrationId = parseInt(req.params.id, 10);
       const integration = await storage.getIntegration(integrationId);
 
       if (!integration) {
@@ -6200,7 +6183,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.patch("/api/insights/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const insightId = parseInt(req.params.id);
+      const insightId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
       const insight = await storage.getInsight(insightId);
 
@@ -7021,7 +7004,7 @@ export async function registerRoutes(app: Express): Promise<void> {
           });
         }
 
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
         const project = await storage.getProject(projectId);
 
@@ -7096,7 +7079,7 @@ export async function registerRoutes(app: Express): Promise<void> {
           });
         }
 
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
         const project = await storage.getProject(projectId);
 
@@ -7164,7 +7147,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const taskId = parseInt(req.params.id);
+        const taskId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
         const { provider } = req.params;
 
@@ -7211,7 +7194,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const taskId = parseInt(req.params.id);
+        const taskId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
         const { status } = req.body;
 
@@ -7276,7 +7259,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
         // If a specific project is specified, check user's permissions
         if (projectId) {
-          const parsedProjectId = parseInt(projectId);
+          const parsedProjectId = parseInt(projectId, 10);
           const isAuthorized = await storage.isUserAuthorized(
             parsedProjectId,
             userId,
@@ -7321,7 +7304,7 @@ export async function registerRoutes(app: Express): Promise<void> {
   // AI Tool Recommendation Routes
   app.get("/api/tasks/:id/tools", isAuthenticated, async (req: any, res) => {
     try {
-      const taskId = parseInt(req.params.id);
+      const taskId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       // Get the task to check user permissions and get task content
@@ -7519,7 +7502,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.post("/api/tasks/:id/analyze", isAuthenticated, async (req: any, res) => {
     try {
-      const taskId = parseInt(req.params.id);
+      const taskId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       // Get the task to check user permissions
@@ -7561,8 +7544,8 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const taskId = parseInt(req.params.taskId);
-        const toolId = parseInt(req.params.toolId);
+        const taskId = parseInt(req.params.taskId, 10);
+        const toolId = parseInt(req.params.toolId, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
         const { status } = req.body;
 
@@ -7738,7 +7721,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.get("/api/budgets/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const budgetId = parseInt(req.params.id);
+      const budgetId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       const budget = await storage.getBudgetEstimate(budgetId);
@@ -7771,7 +7754,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Check if user has access to the project
@@ -7800,7 +7783,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       const { QuoteGenerator } = await import("./services/quote-generator");
       const quoteGenerator = new QuoteGenerator();
 
-      const budgetId = parseInt(req.params.id);
+      const budgetId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       const budget = await storage.getBudgetEstimate(budgetId);
@@ -7834,7 +7817,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       const { QuoteGenerator } = await import("./services/quote-generator");
       const quoteGenerator = new QuoteGenerator();
 
-      const budgetId = parseInt(req.params.id);
+      const budgetId = parseInt(req.params.id, 10);
       const { recipientEmail, senderEmail } = req.body;
       const userId = req.user.dbUserId || req.user.claims.sub;
 
@@ -8060,7 +8043,7 @@ export async function registerRoutes(app: Express): Promise<void> {
           type,
           role,
           department,
-          duration: parseInt(duration),
+          duration: parseInt(duration, 10),
           tools,
           documents,
           culture,
@@ -8093,7 +8076,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const planId = parseInt(req.params.id);
+        const planId = parseInt(req.params.id, 10);
         const plan = await storage.getOnboardingPlan(planId);
 
         if (!plan) {
@@ -8114,7 +8097,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const planId = parseInt(req.params.id);
+        const planId = parseInt(req.params.id, 10);
         const steps = await storage.getOnboardingSteps(planId);
         res.json(steps);
       } catch (error) {
@@ -8129,7 +8112,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const planId = parseInt(req.params.id);
+        const planId = parseInt(req.params.id, 10);
         const stepData = req.body;
 
         const step = await storage.createOnboardingStep({
@@ -8150,7 +8133,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const stepId = parseInt(req.params.id);
+        const stepId = parseInt(req.params.id, 10);
         const stepData = req.body;
 
         const step = await storage.updateOnboardingStep(stepId, stepData);
@@ -8167,7 +8150,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const stepId = parseInt(req.params.id);
+        const stepId = parseInt(req.params.id, 10);
         await storage.deleteOnboardingStep(stepId);
         res.status(204).send();
       } catch (error) {
@@ -8222,7 +8205,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const instanceId = parseInt(req.params.id);
+        const instanceId = parseInt(req.params.id, 10);
         const instance = await storage.getOnboardingInstance(instanceId);
 
         if (!instance) {
@@ -8303,7 +8286,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const planId = parseInt(req.params.id);
+        const planId = parseInt(req.params.id, 10);
 
         if (!process.env.OPENAI_API_KEY) {
           return res
@@ -8415,7 +8398,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const teamMember = await storage.getTeamMember(id);
         if (!teamMember) {
           return res.status(404).json({ message: "Team member not found" });
@@ -8433,7 +8416,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const updates = req.body;
         const teamMember = await storage.updateTeamMember(id, updates);
         res.json(teamMember);
@@ -8449,7 +8432,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         await storage.deleteTeamMember(id);
         res.json({ message: "Team member deleted successfully" });
       } catch (error) {
@@ -8668,7 +8651,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     async (req: any, res) => {
       try {
         const { memberId } = req.params;
-        const member = await storage.getTeamMember(parseInt(memberId));
+        const member = await storage.getTeamMember(parseInt(memberId, 10));
 
         if (!member) {
           return res.status(404).json({ message: "Team member not found" });
@@ -8727,7 +8710,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     async (req: any, res) => {
       try {
         const { memberId } = req.params;
-        const member = await storage.getTeamMember(parseInt(memberId));
+        const member = await storage.getTeamMember(parseInt(memberId, 10));
 
         if (!member) {
           return res.status(404).json({ message: "Team member not found" });
@@ -8786,7 +8769,7 @@ export async function registerRoutes(app: Express): Promise<void> {
       const updates = req.body;
 
       const updatedMember = await storage.updateTeamMember(
-        parseInt(id),
+        parseInt(id, 10),
         updates,
       );
       res.json(updatedMember);
@@ -8802,7 +8785,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     async (req: any, res) => {
       try {
         const { id } = req.params;
-        await storage.deleteTeamMember(parseInt(id));
+        await storage.deleteTeamMember(parseInt(id, 10));
         res.json({ success: true });
       } catch (error) {
         console.error("Error deleting team member:", error);
@@ -8817,7 +8800,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const taskId = parseInt(req.params.taskId);
+        const taskId = parseInt(req.params.taskId, 10);
         const comments = await storage.getTaskComments(taskId);
         res.json(comments);
       } catch (error) {
@@ -8832,7 +8815,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const taskId = parseInt(req.params.taskId);
+        const taskId = parseInt(req.params.taskId, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
         const { content, parentCommentId } = req.body;
 
@@ -8859,7 +8842,7 @@ export async function registerRoutes(app: Express): Promise<void> {
 
   app.put("/api/tasks/comments/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const commentId = parseInt(req.params.id);
+      const commentId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
       const { content } = req.body;
 
@@ -8880,7 +8863,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const commentId = parseInt(req.params.id);
+        const commentId = parseInt(req.params.id, 10);
         await storage.deleteTaskComment(commentId);
         res.json({ success: true });
       } catch (error) {
@@ -8896,7 +8879,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const taskId = parseInt(req.params.taskId);
+        const taskId = parseInt(req.params.taskId, 10);
         const subtasks = await storage.getSubtasks(taskId);
         res.json(subtasks);
       } catch (error) {
@@ -8911,7 +8894,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const taskId = parseInt(req.params.taskId);
+        const taskId = parseInt(req.params.taskId, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         // Get the parent task
@@ -8943,7 +8926,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const taskId = parseInt(req.params.taskId);
+        const taskId = parseInt(req.params.taskId, 10);
         const attachments = await storage.getTaskAttachments(taskId);
         res.json(attachments);
       } catch (error) {
@@ -8959,7 +8942,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     upload.single("file"),
     async (req: any, res) => {
       try {
-        const taskId = parseInt(req.params.taskId);
+        const taskId = parseInt(req.params.taskId, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         if (!req.file) {
@@ -9000,7 +8983,7 @@ export async function registerRoutes(app: Express): Promise<void> {
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const attachmentId = parseInt(req.params.id);
+        const attachmentId = parseInt(req.params.id, 10);
         await storage.deleteTaskAttachment(attachmentId);
         res.json({ success: true });
       } catch (error) {
@@ -9576,7 +9559,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     async (req: any, res) => {
       try {
         const { id } = req.params;
-        await storage.deleteJiraIntegration(parseInt(id));
+        await storage.deleteJiraIntegration(parseInt(id, 10));
         res.json({ success: true });
       } catch (error: any) {
         console.error("Error deleting JIRA integration:", error);
@@ -9682,7 +9665,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
           // Return a hardcoded plan for testing
           const testPlan = {
             initiative: {
-              id: "test-" + Date.now(),
+              id: `test-${Date.now()}`,
               name: `Agile Plan: ${prompt.substring(0, 50)}`,
               description: "Generated agile plan for your project",
               epics: [
@@ -10273,7 +10256,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
       try {
         const { projectId } = req.params;
         const stories = await jiraService.getUserStoriesForProject(
-          parseInt(projectId),
+          parseInt(projectId, 10),
         );
         res.json(stories);
       } catch (error: any) {
@@ -10366,7 +10349,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     async (req: any, res) => {
       try {
         const { id } = req.params;
-        await storage.deleteUserStory(parseInt(id));
+        await storage.deleteUserStory(parseInt(id, 10));
         res.json({ success: true });
       } catch (error: any) {
         console.error("Error deleting user story:", error);
@@ -10385,7 +10368,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
 
       // Recalculate ROI if priority or points changed
       if (updates.priority || updates.storyPoints) {
-        const story = await storage.getUserStory(parseInt(id));
+        const story = await storage.getUserStory(parseInt(id, 10));
         if (story) {
           updates.roiScore = await jiraAgent.calculateRoiScore({
             ...story,
@@ -10394,7 +10377,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
         }
       }
 
-      const updated = await storage.updateUserStory(parseInt(id), updates);
+      const updated = await storage.updateUserStory(parseInt(id, 10), updates);
       res.json(updated);
     } catch (error: any) {
       console.error("Error updating user story:", error);
@@ -10410,7 +10393,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     async (req: any, res) => {
       try {
         const { id } = req.params;
-        await storage.deleteUserStory(parseInt(id));
+        await storage.deleteUserStory(parseInt(id, 10));
         res.json({ success: true });
       } catch (error: any) {
         console.error("Error deleting user story:", error);
@@ -10437,7 +10420,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
         const { id } = req.params;
         const { previousEstimates, teamVelocity } = req.body;
 
-        const story = await storage.getUserStory(parseInt(id));
+        const story = await storage.getUserStory(parseInt(id, 10));
         if (!story) {
           return res.status(404).json({ error: "Story not found" });
         }
@@ -10450,7 +10433,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
 
         // Save estimation
         await storage.createStoryEstimation({
-          storyId: parseInt(id),
+          storyId: parseInt(id, 10),
           estimatedBy: req.session.userId,
           storyPoints: estimation.storyPoints,
           reasoning: estimation.reasoning,
@@ -10459,7 +10442,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
 
         // Update story with points
         // Update story with points
-        await storage.updateUserStory(parseInt(id), {
+        await storage.updateUserStory(parseInt(id, 10), {
           storyPoints: estimation.storyPoints,
           complexity: getComplexityLevel(estimation.factors.complexity),
           risk: getComplexityLevel(estimation.factors.risk),
@@ -10505,7 +10488,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
             );
 
             const saved = await storage.createUserStory({
-              projectId: parseInt(projectId),
+              projectId: parseInt(projectId, 10),
               ...storyData,
               roiScore,
             });
@@ -10545,7 +10528,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
             .json({ error: "JIRA integration not configured" });
         }
 
-        const story = await storage.getUserStory(parseInt(storyId));
+        const story = await storage.getUserStory(parseInt(storyId, 10));
         if (!story) {
           return res.status(404).json({ error: "Story not found" });
         }
@@ -10557,7 +10540,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
         );
 
         // Update story with JIRA info
-        await storage.updateUserStory(parseInt(storyId), {
+        await storage.updateUserStory(parseInt(storyId, 10), {
           jiraIssueKey: jiraIssue.key,
           jiraIssueId: jiraIssue.id,
         });
@@ -10600,7 +10583,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
 
         await jiraIntegration.syncProjectIssues(
           integration,
-          parseInt(projectId),
+          parseInt(projectId, 10),
           projectKey,
         );
 
@@ -10661,7 +10644,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     async (req: any, res) => {
       try {
         const profile = await storage.updateSocialMediaBrandProfile(
-          parseInt(req.params.id),
+          parseInt(req.params.id, 10),
           req.body,
         );
         res.json(profile);
@@ -10718,7 +10701,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     async (req: any, res) => {
       try {
         const goal = await storage.updateSocialMediaGoal(
-          parseInt(req.params.id),
+          parseInt(req.params.id, 10),
           req.body,
         );
         res.json(goal);
@@ -10734,7 +10717,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     isAuthenticated,
     async (req: any, res) => {
       try {
-        await storage.deleteSocialMediaGoal(parseInt(req.params.id));
+        await storage.deleteSocialMediaGoal(parseInt(req.params.id, 10));
         res.json({ success: true });
       } catch (error) {
         console.error("Error deleting goal:", error);
@@ -10780,7 +10763,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const post = await storage.getSocialMediaPost(parseInt(req.params.id));
+        const post = await storage.getSocialMediaPost(parseInt(req.params.id, 10));
         if (!post) {
           return res.status(404).json({ message: "Post not found" });
         }
@@ -10822,7 +10805,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     async (req: any, res) => {
       try {
         const post = await storage.updateSocialMediaPost(
-          parseInt(req.params.id),
+          parseInt(req.params.id, 10),
           req.body,
         );
         res.json(post);
@@ -10838,7 +10821,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     isAuthenticated,
     async (req: any, res) => {
       try {
-        await storage.deleteSocialMediaPost(parseInt(req.params.id));
+        await storage.deleteSocialMediaPost(parseInt(req.params.id, 10));
         res.json({ success: true });
       } catch (error) {
         console.error("Error deleting post:", error);
@@ -10854,7 +10837,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     async (req: any, res) => {
       try {
         const metrics = await storage.getSocialMediaPostMetrics(
-          parseInt(req.params.postId),
+          parseInt(req.params.postId, 10),
         );
         res.json(metrics);
       } catch (error) {
@@ -10871,7 +10854,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
       try {
         const metricsData = insertSocialMediaPostMetricsSchema.parse({
           ...req.body,
-          postId: parseInt(req.params.postId),
+          postId: parseInt(req.params.postId, 10),
         });
         const metrics = await storage.createSocialMediaPostMetrics(metricsData);
         res.json(metrics);
@@ -11083,7 +11066,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const taskId = parseInt(req.params.taskId);
+        const taskId = parseInt(req.params.taskId, 10);
         const { category } = req.body;
 
         let rgaCategory = await storage.getRgaCategory(taskId);
@@ -11220,7 +11203,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
         for (const classification of classifications.classifications || []) {
           const task = tasks.find((t: any) => t.id === classification.taskId);
           if (task) {
-            let rgaCategory = await storage.getRgaCategory(task.id);
+            const rgaCategory = await storage.getRgaCategory(task.id);
 
             if (rgaCategory) {
               await storage.updateRgaCategory(rgaCategory.id, {
@@ -11377,7 +11360,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
 
   app.get("/api/ai-agents/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id, 10);
       const agent = await storage.getAiAgent(id);
       if (!agent) {
         return res.status(404).json({ message: "AI agent not found" });
@@ -11391,7 +11374,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
 
   app.patch("/api/ai-agents/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id, 10);
       const updates = req.body;
       const agent = await storage.updateAiAgent(id, updates);
       res.json(agent);
@@ -11403,7 +11386,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
 
   app.delete("/api/ai-agents/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id, 10);
       await storage.deleteAiAgent(id);
       res.status(204).send();
     } catch (error) {
@@ -11417,7 +11400,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const projectId = parseInt(req.params.projectId);
+        const projectId = parseInt(req.params.projectId, 10);
         const agents = await storage.getAiAgentsForProject(projectId);
         res.json(agents);
       } catch (error) {
@@ -11440,7 +11423,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
           });
         }
 
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
         const project = await storage.getProject(projectId);
 
@@ -11725,7 +11708,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
       }
 
       const userId = session.metadata?.userId;
-      const planId = parseInt(session.metadata?.planId || "0");
+      const planId = parseInt(session.metadata?.planId || "0", 10);
 
       console.log("Processing for user:", userId, "plan:", planId);
 
@@ -11971,7 +11954,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
         if (projectId) {
           // Check project access
           const hasAccess = await storage.isUserAuthorized(
-            parseInt(projectId),
+            parseInt(projectId, 10),
             userId,
           );
           if (!hasAccess) {
@@ -11979,7 +11962,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
               .status(403)
               .json({ message: "Access denied to this project" });
           }
-          tasks = await storage.getTasksByProjectId(parseInt(projectId));
+          tasks = await storage.getTasksByProjectId(parseInt(projectId, 10));
         } else {
           // Get all accessible tasks
           const userProjects = await storage.getProjectsForUser(userId);
@@ -12142,7 +12125,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
       let tasks = [];
       if (projectId) {
         // Get tasks for specific project
-        const project = await storage.getProject(parseInt(projectId));
+        const project = await storage.getProject(parseInt(projectId, 10));
         console.log(
           `[Prioritisor] Project found:`,
           project ? `${project.name} (ID: ${project.id})` : "null",
@@ -12154,7 +12137,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
 
         // Check if user has access to this project
         const hasAccess = await storage.isUserAuthorized(
-          parseInt(projectId),
+          parseInt(projectId, 10),
           userId,
         );
         console.log(
@@ -12168,7 +12151,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
             .json({ message: "Access denied to this project" });
         }
 
-        tasks = await storage.getTasksByProjectId(parseInt(projectId));
+        tasks = await storage.getTasksByProjectId(parseInt(projectId, 10));
         console.log(
           `[Prioritisor] Tasks found for project ${projectId}:`,
           tasks.length,
@@ -12275,7 +12258,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
         // Save priority scores to database
         const savedScores = [];
         for (const analysis of analyses) {
-          const taskId = parseInt(analysis.task_id);
+          const taskId = parseInt(analysis.task_id, 10);
           const scoreData = {
             taskId,
             priorityScore: Math.round(analysis.priority_score * 10), // Store as 1-100 for precision
@@ -12341,7 +12324,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
 
         const preferences = await storage.getPriorityWeightingPreference(
           userId,
-          projectId ? parseInt(projectId) : undefined,
+          projectId ? parseInt(projectId, 10) : undefined,
         );
 
         if (!preferences) {
@@ -12429,7 +12412,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     async (req: any, res) => {
       try {
         const userId = req.user.dbUserId || req.user.claims?.sub;
-        const taskId = parseInt(req.params.taskId);
+        const taskId = parseInt(req.params.taskId, 10);
         const { priority } = req.body;
 
         // Validate priority value
@@ -12477,7 +12460,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
           });
         }
 
-        const projectId = parseInt(req.params.id);
+        const projectId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
         const project = await storage.getProject(projectId);
 
@@ -12744,7 +12727,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
         const errorMsg =
           tokenData.error_description || tokenData.error || "token_failed";
         res.redirect(
-          "/social-media-agent?error=" + encodeURIComponent(errorMsg),
+          `/social-media-agent?error=${encodeURIComponent(errorMsg)}`,
         );
       }
     } catch (error) {
@@ -13365,7 +13348,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
   // Get specific form (authenticated)
   app.get("/api/forms/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const formId = parseInt(req.params.id);
+      const formId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       const form = await storage.getForm(formId);
@@ -13390,7 +13373,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
   // Update form
   app.patch("/api/forms/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const formId = parseInt(req.params.id);
+      const formId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       const form = await storage.getForm(formId);
@@ -13416,7 +13399,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
   // Delete form
   app.delete("/api/forms/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const formId = parseInt(req.params.id);
+      const formId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       const form = await storage.getForm(formId);
@@ -13536,7 +13519,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
     isAuthenticated,
     async (req: any, res) => {
       try {
-        const formId = parseInt(req.params.id);
+        const formId = parseInt(req.params.id, 10);
         const userId = req.user.dbUserId || req.user.claims.sub;
 
         const form = await storage.getForm(formId);
@@ -13564,7 +13547,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
   // Generate QR code for form (authenticated)
   app.get("/api/forms/:id/qr", isAuthenticated, async (req: any, res) => {
     try {
-      const formId = parseInt(req.params.id);
+      const formId = parseInt(req.params.id, 10);
       const userId = req.user.dbUserId || req.user.claims.sub;
 
       const form = await storage.getForm(formId);
@@ -14078,7 +14061,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const candidate = await storage.getFeatureCandidate(id);
         if (!candidate)
           return res.status(404).json({ error: "Feature candidate not found" });
@@ -14104,7 +14087,7 @@ Respond with actionable insights and specific recommendations. Include assignmen
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const candidate = await storage.getFeatureCandidate(id);
         if (!candidate)
           return res.status(404).json({ error: "Feature candidate not found" });
@@ -14424,7 +14407,7 @@ Sort the array by riceScore descending (best first).`;
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const candidate = await storage.getFeatureCandidate(id);
         if (!candidate)
           return res.status(404).json({ error: "Feature candidate not found" });
@@ -14483,7 +14466,7 @@ Sort the array by riceScore descending (best first).`;
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const candidate = await storage.getFeatureCandidate(id);
         if (!candidate)
           return res.status(404).json({ error: "Feature candidate not found" });
@@ -14631,7 +14614,7 @@ Sort the array by riceScore descending (best first).`;
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const candidate = await storage.getFeatureCandidate(id);
         if (!candidate)
           return res.status(404).json({ error: "Feature candidate not found" });
@@ -15758,7 +15741,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       const { fitMessages } = await import("./services/prompt-budget");
 
       const contextNote = context
-        ? "\n\n[User-provided context (transcripts, notes, files):]\n" + context
+        ? `\n\n[User-provided context (transcripts, notes, files):]\n${context}`
         : "";
 
       const rawMessages: Array<{
@@ -15837,7 +15820,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         /##\s*Insights Identified/i.test(fullText) ||
         /##\s*Recommended Feature/i.test(fullText) ||
         /(^|\n)\s*#{2,3}\s*Insight[:\s]/i.test(fullText) ||
-        /(^|\n)\s*\*\*Recommended Feature[:\*]/i.test(fullText) ||
+        /(^|\n)\s*\*\*Recommended Feature[:*]/i.test(fullText) ||
         /(^|\n)\s*Recommended Feature:/i.test(fullText);
       const jsonMatch = fullText.match(/```json\s*([\s\S]*?)```/);
       let parsedFromJson: any = null;
@@ -16262,7 +16245,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
 
         const words = reply.split(" ");
         for (let i = 0; i < words.length; i += 3) {
-          const chunk = words.slice(i, i + 3).join(" ") + " ";
+          const chunk = `${words.slice(i, i + 3).join(" ")} `;
           sendEvent({ type: "text", content: chunk });
           await new Promise((r) => setTimeout(r, 20));
         }
@@ -16390,7 +16373,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         if (planBrainContext) {
           const cappedBrain = trimToCharBudget(planBrainContext, 20000).text;
           messageWithContext =
-            messageWithContext + "\n\n" + cappedBrain + citationInstructions;
+            `${messageWithContext}\n\n${cappedBrain}${citationInstructions}`;
         }
 
         const cappedMessage = trimToCharBudget(messageWithContext, 200000);
@@ -16453,7 +16436,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         if (content) {
           const words = content.split(" ");
           for (let i = 0; i < words.length; i += 3) {
-            const chunk = words.slice(i, i + 3).join(" ") + " ";
+            const chunk = `${words.slice(i, i + 3).join(" ")} `;
             sendEvent({ type: "text", content: chunk });
             await new Promise((r) => setTimeout(r, 20));
           }
@@ -16572,7 +16555,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         if (response.content) {
           const words = response.content.split(" ");
           for (let i = 0; i < words.length; i += 3) {
-            const chunk = words.slice(i, i + 3).join(" ") + " ";
+            const chunk = `${words.slice(i, i + 3).join(" ")} `;
             sendEvent({ type: "text", content: chunk });
             await new Promise((r) => setTimeout(r, 20));
           }
@@ -17710,7 +17693,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         .digest("hex")
         .slice(0, 16);
       if (expectedSig !== decoded.s) return null;
-      const elapsed = Date.now() - parseInt(decoded.t);
+      const elapsed = Date.now() - parseInt(decoded.t, 10);
       if (elapsed > 10 * 60 * 1000) return null;
       return decoded.u;
     } catch {
@@ -18083,7 +18066,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       console.error("Error creating Teams meeting:", error);
       res
         .status(500)
-        .json({ error: "Failed to create meeting: " + error.message });
+        .json({ error: `Failed to create meeting: ${error.message}` });
     }
   });
 
@@ -18094,7 +18077,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getTeamsMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -18173,7 +18156,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         console.error("Error updating Teams meeting:", error);
         res
           .status(500)
-          .json({ error: "Failed to update meeting: " + error.message });
+          .json({ error: `Failed to update meeting: ${error.message}` });
       }
     },
   );
@@ -18185,7 +18168,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getTeamsMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -18351,7 +18334,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
               onlineMeetingId,
               t.id,
             );
-            fullTranscript += content + "\n\n";
+            fullTranscript += `${content}\n\n`;
           }
           fullTranscript = fullTranscript.trim();
 
@@ -18399,7 +18382,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getTeamsMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -18446,7 +18429,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getTeamsMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -18529,7 +18512,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getTeamsMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -18737,7 +18720,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         console.error("[Google Meet] Create meeting error:", error);
         res
           .status(500)
-          .json({ error: "Failed to create meeting: " + error.message });
+          .json({ error: `Failed to create meeting: ${error.message}` });
       }
     },
   );
@@ -18750,7 +18733,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getGoogleMeetMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -18834,7 +18817,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         console.error("[Google Meet] Update meeting error:", error);
         res
           .status(500)
-          .json({ error: "Failed to update meeting: " + error.message });
+          .json({ error: `Failed to update meeting: ${error.message}` });
       }
     },
   );
@@ -18941,7 +18924,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         res
           .status(500)
           .json({
-            error: "Failed to import calendar events: " + error.message,
+            error: `Failed to import calendar events: ${error.message}`,
           });
       }
     },
@@ -18955,7 +18938,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getGoogleMeetMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -19068,7 +19051,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         console.error("[Google Meet] Fetch transcript error:", error);
         res
           .status(500)
-          .json({ error: "Failed to fetch transcript: " + error.message });
+          .json({ error: `Failed to fetch transcript: ${error.message}` });
       }
     },
   );
@@ -19081,7 +19064,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getGoogleMeetMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -19125,7 +19108,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getGoogleMeetMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -19423,7 +19406,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       console.error("[Zoom] Create meeting error:", error);
       res
         .status(500)
-        .json({ error: "Failed to create meeting: " + error.message });
+        .json({ error: `Failed to create meeting: ${error.message}` });
     }
   });
 
@@ -19435,7 +19418,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getZoomMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -19536,7 +19519,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
           zoomService
             .sendMeetingInvitations(
               effectiveAttendees,
-              effectiveSubject + " (Updated)",
+              `${effectiveSubject} (Updated)`,
               effectiveJoinUrl,
               effectiveStartUtc,
               effectiveDur,
@@ -19552,7 +19535,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         console.error("[Zoom] Update meeting error:", error);
         res
           .status(500)
-          .json({ error: "Failed to update meeting: " + error.message });
+          .json({ error: `Failed to update meeting: ${error.message}` });
       }
     },
   );
@@ -19565,7 +19548,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getZoomMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -19613,7 +19596,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getZoomMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -19711,7 +19694,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         console.error("[Zoom] Fetch transcript error:", error);
         res
           .status(500)
-          .json({ error: "Failed to fetch transcript: " + error.message });
+          .json({ error: `Failed to fetch transcript: ${error.message}` });
       }
     },
   );
@@ -19723,7 +19706,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const meetingId = parseInt(req.params.id);
+        const meetingId = parseInt(req.params.id, 10);
         const meeting = await storage.getZoomMeeting(meetingId);
         if (!meeting || meeting.userId !== userId) {
           return res.status(404).json({ error: "Meeting not found" });
@@ -20352,7 +20335,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const conv = await storage.getConversation(id);
         if (!conv || conv.userId !== userId)
           return res.status(404).json({ error: "Conversation not found" });
@@ -20375,7 +20358,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         if (Number.isNaN(id))
           return res.status(400).json({ error: "Invalid id" });
         const conv = await storage.getConversation(id);
@@ -20438,7 +20421,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         if (Number.isNaN(id))
           return res.status(400).json({ error: "Invalid id" });
         const conv = await storage.getConversation(id);
@@ -20470,7 +20453,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         if (Number.isNaN(id))
           return res.status(400).json({ error: "Invalid id" });
         const conv = await storage.getConversation(id);
@@ -20508,7 +20491,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
     try {
       const userId = req.user?.dbUserId || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Unauthorized" });
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id, 10);
       if (Number.isNaN(id))
         return res.status(400).json({ error: "Invalid id" });
       const conv = await storage.getConversation(id);
@@ -20623,7 +20606,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         if (Number.isNaN(id))
           return res.status(400).json({ error: "Invalid id" });
         const item = await storage.getEvidenceItem(id);
@@ -20665,7 +20648,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
     try {
       const userId = req.user?.dbUserId || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Unauthorized" });
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id, 10);
       const existing = await storage.getEvidenceItem(id);
       if (!existing || existing.userId !== userId)
         return res.status(404).json({ error: "Evidence item not found" });
@@ -20697,7 +20680,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
     try {
       const userId = req.user?.dbUserId || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Unauthorized" });
-      const id = parseInt(req.params.id);
+      const id = parseInt(req.params.id, 10);
       const existing = await storage.getEvidenceItem(id);
       if (!existing || existing.userId !== userId)
         return res.status(404).json({ error: "Evidence item not found" });
@@ -21114,8 +21097,8 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
           return res.status(400).json({ error: "Unsupported file type" });
         }
 
-        const path = await import("path");
-        const os = await import("os");
+        const path = await import("node:path");
+        const os = await import("node:os");
         const uploadId = crypto.randomUUID();
         const tmpPath = path.join(
           os.tmpdir(),
@@ -21194,7 +21177,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
           return res.status(400).json({ error: "Chunk exceeds declared size" });
         }
 
-        const fs = await import("fs");
+        const fs = await import("node:fs");
         const offset = index * session.chunkSize;
         await new Promise<void>((resolve, reject) => {
           fs.open(session.tmpPath, "r+", (openErr, fd) => {
@@ -21244,7 +21227,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
     isAuthenticated,
     transcribeIntake,
     async (req: any, res) => {
-      const fs = await import("fs");
+      const fs = await import("node:fs");
       const cleanupTmp = (p?: string) => {
         if (!p) return;
         try { fs.unlinkSync(p); } catch {}
@@ -21592,7 +21575,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
         if (chunkSessionId) chunkSessions.delete(chunkSessionId);
         res.status(500).json({
           error:
-            "Failed to transcribe audio: " + (error.message || "Unknown error"),
+            `Failed to transcribe audio: ${error.message || "Unknown error"}`,
         });
       }
     },
@@ -21681,7 +21664,7 @@ Your JSON MUST follow this exact structure. Every feature MUST include a non-emp
     const sample = (() => {
       const joined = lines.join("\n");
       if (joined.length <= 12000) return joined;
-      return joined.slice(0, 8000) + "\n…\n" + joined.slice(-3500);
+      return `${joined.slice(0, 8000)}\n…\n${joined.slice(-3500)}`;
     })();
 
     const sys =
@@ -22132,7 +22115,7 @@ Be specific and reference actual data points. Use percentages and comparisons wh
       try {
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const conv = await storage.getConversation(id);
         if (!conv || conv.userId !== userId)
           return res.status(404).json({ error: "Conversation not found" });
@@ -22416,7 +22399,7 @@ Be specific and reference actual data points. Use percentages and comparisons wh
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const itemId = String(req.params.itemId);
         const conv = await storage.getConversation(id);
         if (!conv || conv.userId !== userId) {
@@ -22521,7 +22504,7 @@ Be specific and reference actual data points. Use percentages and comparisons wh
           buildTask: (item, lockedConv) => {
             const taskName =
               item.text.length > 120
-                ? item.text.slice(0, 117) + "..."
+                ? `${item.text.slice(0, 117)}...`
                 : item.text;
             const descriptionParts: string[] = [];
             if (item.owner) descriptionParts.push(`Owner: ${item.owner}`);
@@ -22605,7 +22588,7 @@ Be specific and reference actual data points. Use percentages and comparisons wh
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const itemId = String(req.params.itemId);
         const conv = await storage.getConversation(id);
         if (!conv || conv.userId !== userId) {
@@ -22680,7 +22663,7 @@ Be specific and reference actual data points. Use percentages and comparisons wh
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const itemId = String(req.params.itemId);
         const conv = await storage.getConversation(id);
         if (!conv || conv.userId !== userId) {
@@ -22809,7 +22792,7 @@ Be specific and reference actual data points. Use percentages and comparisons wh
         }
 
         const taskName =
-          item.text.length > 120 ? item.text.slice(0, 117) + "..." : item.text;
+          item.text.length > 120 ? `${item.text.slice(0, 117)}...` : item.text;
         const descriptionParts: string[] = [];
         if (item.owner) descriptionParts.push(`Owner: ${item.owner}`);
         if (item.dueHint) descriptionParts.push(`Due: ${item.dueHint}`);
@@ -22861,7 +22844,7 @@ Be specific and reference actual data points. Use percentages and comparisons wh
         const userId = req.user?.dbUserId || req.user?.claims?.sub;
         if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-        const id = parseInt(req.params.id);
+        const id = parseInt(req.params.id, 10);
         const itemId = String(req.params.itemId);
         const conv = await storage.getConversation(id);
         if (!conv || conv.userId !== userId) {

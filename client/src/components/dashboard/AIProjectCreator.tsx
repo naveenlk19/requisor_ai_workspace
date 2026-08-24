@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import type React from "react";
+import { useState, } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useUpgradeModal } from "@/hooks/useUpgradeModal";
@@ -14,9 +15,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { AIProjectPlan } from "@/types";
+import type { AIProjectPlan } from "@/types";
 import IntegrationProvider from "@/types/integration";
 import {
   generateProjectPlan,

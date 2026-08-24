@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation } from "wouter";
 import { Card } from "@/components/ui/card";
-import { useAuth } from "@/hooks/useAuth";
 
 export default function VerifyEmailPage() {
   const [, setLocation] = useLocation();

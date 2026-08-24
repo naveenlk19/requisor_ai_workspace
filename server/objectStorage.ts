@@ -4,9 +4,9 @@ import {
   PutObjectCommand,
   HeadObjectCommand,
 } from "@aws-sdk/client-s3";
-import { Response } from "express";
-import { randomUUID } from "crypto";
-import { PassThrough, Readable } from "stream";
+import type { Response } from "express";
+import { randomUUID } from "node:crypto";
+import { PassThrough, type Readable } from "node:stream";
 
 // S3-compatible object storage. Works with AWS S3, Cloudflare R2, and local
 // MinIO — select the backend purely via env vars:

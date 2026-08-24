@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
 import { 
-  AlertCircle, 
-  ArrowUpDown, 
   Calculator, 
   CheckCircle2, 
   Cloud, 
-  Edit2, 
   Hash, 
   Loader2, 
   RefreshCw, 
@@ -107,10 +103,11 @@ export function StoryList({ projectId }: StoryListProps) {
           return (b.roiScore || 0) - (a.roiScore || 0);
         case 'storyPoints':
           return (a.storyPoints || 0) - (b.storyPoints || 0);
-        case 'priority':
+        case 'priority': {
           const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
           return (priorityOrder[a.priority as keyof typeof priorityOrder] || 2) - 
                  (priorityOrder[b.priority as keyof typeof priorityOrder] || 2);
+        }
         default:
           return 0;
       }

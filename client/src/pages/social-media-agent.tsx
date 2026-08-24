@@ -1,17 +1,14 @@
 // Force rebuild: resolving stale import error
-import React, { useEffect, useMemo, useState, useRef, useCallback } from "react";
+import type React from "react";
+import { useEffect, useMemo, useState, useRef, useCallback } from "react";
 import axios from "axios";
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { format, addDays, isSameDay, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, addMonths, subMonths, isSameMonth, addWeeks, subWeeks, isSameYear } from "date-fns";
+import { format, isSameDay, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, addMonths, subMonths, isSameMonth, addWeeks, subWeeks, isSameYear } from "date-fns";
 import {
-  Upload, X, CheckCircle, Check, ExternalLink, Instagram, Paperclip, Calendar as CalendarIcon, Edit, Trash2, Send, Eye, Layout, PenTool, Settings, Loader2, Search,
-  Filter,
-  MoreVertical,
+  Upload, X, CheckCircle, ExternalLink, Instagram, Paperclip, Calendar as CalendarIcon, Edit, Trash2, Send, Eye, PenTool, Settings, 
   CheckCircle2,
   Clock, // Added Clock import
-  Sparkles, AlertCircle, Edit2, Sliders, RefreshCw, MessageSquare, Plus, Sidebar, ChevronLeft, ChevronRight
+  Sparkles, AlertCircle, MessageSquare, Plus, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { FaTwitter, FaFacebook, FaLinkedin } from "react-icons/fa";
 import {
@@ -88,10 +85,10 @@ function extractFinalContent(apiPayload: any, platform: string) {
 
   // Platform-specific post-processing
   if (platform === "Mastodon" && content.length > 500) {
-    content = content.slice(0, 497) + "...";
+    content = `${content.slice(0, 497)}...`;
   }
   if (platform === "Twitter" && content.length > 280) {
-    content = content.slice(0, 277) + "...";
+    content = `${content.slice(0, 277)}...`;
   }
 
   return { content, tasks };
@@ -1540,7 +1537,7 @@ const SocialMediaAgent = () => {
             if (data.success) {
               results.push(`✅ Twitter: Published`);
               const newPost = {
-                id: Date.now().toString() + "-tw",
+                id: `${Date.now().toString()}-tw`,
                 platform: "Twitter",
                 topic: topic || "New Post",
                 content: contentToPublish,
@@ -1587,7 +1584,7 @@ const SocialMediaAgent = () => {
             if (data.success) {
               results.push(`✅ Facebook: Published`);
               const newPost = {
-                id: Date.now().toString() + "-fb",
+                id: `${Date.now().toString()}-fb`,
                 platform: "Facebook",
                 topic: topic || "New Post",
                 content: contentToPublish,
@@ -1624,7 +1621,7 @@ const SocialMediaAgent = () => {
             if (data.success) {
               results.push(`✅ LinkedIn: Published`);
               const newPost = {
-                id: Date.now().toString() + "-li",
+                id: `${Date.now().toString()}-li`,
                 platform: "LinkedIn",
                 topic: topic || "New Post",
                 content: contentToPublish,
@@ -1662,7 +1659,7 @@ const SocialMediaAgent = () => {
             if (data.success) {
               results.push(`✅ Mastodon: Published`);
               const newPost = {
-                id: Date.now().toString() + "-mast",
+                id: `${Date.now().toString()}-mast`,
                 platform: "Mastodon",
                 topic: topic || "New Post",
                 content: contentToPublish,
@@ -1918,7 +1915,7 @@ const SocialMediaAgent = () => {
       }
     } catch (err: any) {
       console.error("Failed to clear schedule", err);
-      alert("Failed to clear scheduled posts: " + (err.response?.data?.error || err.message));
+      alert(`Failed to clear scheduled posts: ${err.response?.data?.error || err.message}`);
     } finally {
       setLoading(false);
     }
@@ -2339,7 +2336,7 @@ const SocialMediaAgent = () => {
         content = data.content || "";
       }
 
-      console.log("🎯 Extracted content:", content.substring(0, 100) + "...");
+      console.log("🎯 Extracted content:", `${content.substring(0, 100)}...`);
       console.log("✅ Content extraction successful");
 
       setAgentOutputs([]);
@@ -2427,7 +2424,7 @@ const SocialMediaAgent = () => {
     try {
       const scheduledDateTime = new Date(selectedDate);
       const [hours, minutes] = selectedTime.split(":");
-      scheduledDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      scheduledDateTime.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
 
       const now = new Date();
       if (scheduledDateTime <= now) {
@@ -2440,7 +2437,7 @@ const SocialMediaAgent = () => {
 
       const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      let credentials: any = {
+      const credentials: any = {
         topic: scheduleTopicOverride || topic || "Scheduled content",
         tone: scheduleToneOverride || tone,
         platform,

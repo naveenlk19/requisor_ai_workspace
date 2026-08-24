@@ -10,8 +10,8 @@
  * The wire shape is identical, so no code changes are required.
  */
 
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 const DEFAULT_API_URL =
   process.env.UNSTRUCTURED_API_URL ||

@@ -1,19 +1,16 @@
 import { Sentry } from "./instrument"; // must stay the FIRST import
-import express, { type Request, Response, NextFunction } from "express";
+import express, { type Request, type Response, type NextFunction } from "express";
 import multer from "multer";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import { log } from "./vite";
 import { seedData } from "./seed-data";
-import { logger } from "./services/logger";
 import { config } from "./config/environment";
 import {
   setupProductionEnvironment,
-  getProductionPort,
 } from "./production-startup";
 import { logService } from "./services/log-service";
-import path from "path";
-import fs from "fs";
-import { spawn } from "child_process";
+import path from "node:path";
+import fs from "node:fs";
 import { executeScheduledPost } from "./services/social-scheduler";
 import { DatabaseStorage } from "./database-storage";
 
@@ -291,7 +288,7 @@ app.get("/api/health", (req, res) => {
     ];
     const shouldNoIndex = (p: string) =>
       NOINDEX_PREFIXES.some(
-        (pref) => p === pref || p.startsWith(pref + "/"),
+        (pref) => p === pref || p.startsWith(`${pref}/`),
       );
 
     // SPA catch-all route - must be AFTER API routes

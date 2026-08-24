@@ -123,7 +123,7 @@ async function main() {
     const ogContext = await browser.createBrowserContext();
     const ogPage = await ogContext.newPage();
     await ogPage.setViewport({ width: 1200, height: 630, deviceScaleFactor: 2 });
-    await ogPage.goto(BASE + "/", { waitUntil: "networkidle2", timeout: 30_000 });
+    await ogPage.goto(`${BASE}/`, { waitUntil: "networkidle2", timeout: 30_000 });
     await new Promise((r) => setTimeout(r, 1500));
     await ogPage.screenshot({
       path: path.join(OUT_DIR, "og.png"),

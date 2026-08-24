@@ -1,9 +1,6 @@
 import OpenAI from "openai";
-import { storage } from "../database-storage";
 import { trackTokenUsage } from "./token-tracker";
-import {
-  InsertUserStory,
-  InsertStoryEstimation,
+import type {
   UserStory,
 } from "@shared/schema";
 

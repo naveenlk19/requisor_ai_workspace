@@ -1879,7 +1879,7 @@ export default function MeetingsPage() {
     createZoomMeetingMutation.mutate({
       subject,
       startTime: startDateTime,
-      duration: parseInt(duration) || 60,
+      duration: parseInt(duration, 10) || 60,
       attendees: attendeeList,
       description,
       timeZone: userTimeZone,
@@ -1898,7 +1898,7 @@ export default function MeetingsPage() {
       data: {
         subject: editZoomForm.subject,
         startTime: startDateTime,
-        duration: parseInt(editZoomForm.duration) || 60,
+        duration: parseInt(editZoomForm.duration, 10) || 60,
         attendees: attendeeList,
         description: editZoomForm.description,
         timeZone: userTimeZone,

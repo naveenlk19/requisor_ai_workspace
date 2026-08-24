@@ -1,5 +1,5 @@
-import { IntegrationProvider } from "@shared/integrations";
-import { Integration } from "@shared/schema";
+import type { IntegrationProvider } from "@shared/integrations";
+import type { Integration } from "@shared/schema";
 import { storage } from "../../storage";
 
 export interface TaskData {

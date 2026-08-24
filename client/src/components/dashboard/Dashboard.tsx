@@ -1,10 +1,8 @@
-import React from "react";
+
 import { useToast } from "@/hooks/use-toast";
-import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AIProjectCreator } from "./AIProjectCreator";
-import { Link } from "wouter";
 
 export function Dashboard() {
   const { toast } = useToast();

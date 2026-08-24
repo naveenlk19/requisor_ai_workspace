@@ -14,11 +14,8 @@ import {
   Upload, 
   Loader2, 
   CheckCircle,
-  XCircle,
   ExternalLink,
   AlertCircle,
-  GitBranch,
-  FileText,
   Eye,
   EyeOff,
   Plus

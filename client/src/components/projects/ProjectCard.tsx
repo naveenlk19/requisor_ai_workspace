@@ -1,7 +1,7 @@
-import { Project } from "@shared/schema";
+import type { Project } from "@shared/schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProgressBar } from "./ProgressBar";
-import { format, differenceInDays } from "date-fns";
+import { differenceInDays } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useLocation } from "wouter";
 import { updateProjectLastOpened } from "@/lib/projectUtils";
@@ -14,11 +14,7 @@ import {
   SplitSquareVertical,
   GitBranch,
   Circle,
-  AlertTriangle,
   Layers,
-  Sparkles,
-  Zap,
-  ArrowRight,
 } from "lucide-react";
 
 interface ProjectCardProps {

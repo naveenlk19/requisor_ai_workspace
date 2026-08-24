@@ -1,8 +1,4 @@
 import mascot from "@/assets/requisor-mascot.png";
-import { useAuth } from "@/hooks/useAuth.tsx";
-import { useLocation } from "wouter";
-import logo from "@assets/Group_185_1764797140461.png";
-import davidVideo from "/video/David_Video.mp4";
 import "../landing-theme.css";
 // logo.dev public token (safe for client use per logo.dev docs)
 const LOGO_TOKEN = "pk_X-1ZO13GSgeOoUrIuJ6GMQ";

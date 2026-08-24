@@ -124,7 +124,7 @@ export function mergePlansClient(
     console.log(`📊 ID Preservation Check (adjusted for intentional removals):`);
     console.log(`  Original milestones: ${checkExistingMilestones.length}, After removing combined: ${adjustedExistingMilestones.length}`);
     console.log(`  Milestones: ${preservedMilestones.length}/${baseCount} (${(milestonePreservationRate * 100).toFixed(0)}%)`);
-    console.log(`  Tasks: ${preservedTaskCount}/${allExistingTasks.length} (${allExistingTasks.length === 0 ? 'N/A' : (taskPreservationRate * 100).toFixed(0) + '%'})`);
+    console.log(`  Tasks: ${preservedTaskCount}/${allExistingTasks.length} (${allExistingTasks.length === 0 ? 'N/A' : `${(taskPreservationRate * 100).toFixed(0)}%`})`);
     
     // Guard against NaN in milestone preservation as well
     if (isNaN(milestonePreservationRate)) {
@@ -132,7 +132,7 @@ export function mergePlansClient(
       // Force fallback by continuing to merge code below
     } else if (milestonePreservationRate >= threshold && taskPreservationRate >= threshold) {
       // Good enough - server did a proper merge
-      const taskDisplay = allExistingTasks.length === 0 ? 'N/A' : (taskPreservationRate * 100).toFixed(0) + '%';
+      const taskDisplay = allExistingTasks.length === 0 ? 'N/A' : `${(taskPreservationRate * 100).toFixed(0)}%`;
       console.log(`✅ Server preserved IDs (M: ${(milestonePreservationRate * 100).toFixed(0)}%, T: ${taskDisplay}, threshold: ${(threshold * 100)}%)`);
       return {
         mergedPlan: updatedPlan,
@@ -141,8 +141,8 @@ export function mergePlansClient(
     }
     
     // Too many IDs lost - need client-side merge fallback
-    const milestonePercent = isNaN(milestonePreservationRate) ? 'NaN' : (milestonePreservationRate * 100).toFixed(0) + '%';
-    const taskPercent = allExistingTasks.length === 0 ? 'N/A' : (isNaN(taskPreservationRate) ? 'NaN' : (taskPreservationRate * 100).toFixed(0) + '%');
+    const milestonePercent = isNaN(milestonePreservationRate) ? 'NaN' : `${(milestonePreservationRate * 100).toFixed(0)}%`;
+    const taskPercent = allExistingTasks.length === 0 ? 'N/A' : (isNaN(taskPreservationRate) ? 'NaN' : `${(taskPreservationRate * 100).toFixed(0)}%`);
     console.warn(`⚠️ ID preservation below threshold (M: ${milestonePercent}, T: ${taskPercent}, need: ${(threshold * 100)}%). Performing client-side merge...`);
   }
 

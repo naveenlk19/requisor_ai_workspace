@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from "react";
-import { Task } from "@shared/schema";
+import type React from "react";
+import { useState, useMemo } from "react";
+import type { Task } from "@shared/schema";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,21 +14,17 @@ import {
   Circle,
   Clock,
   AlertCircle,
-  User,
   Calendar,
   CalendarIcon,
   ArrowRight,
   Edit,
   Save,
   X,
-  Flag,
   Sparkles,
 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { updateTask } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
-import { SyncActions } from "../tasks/SyncActions";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -86,7 +83,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
       onDragOver={onDragOver}
       onDrop={(e) => {
         e.preventDefault();
-        const taskId = parseInt(e.dataTransfer.getData("taskId"));
+        const taskId = parseInt(e.dataTransfer.getData("taskId"), 10);
         onDrop(taskId, status);
       }}
     >

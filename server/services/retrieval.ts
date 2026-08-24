@@ -469,7 +469,7 @@ async function searchBeliefs(
     const sourceIds = (row.source_embedding_ids || []).map((n: any) =>
       Number(n),
     );
-    const text = `Durable belief: ${holder ? holder + " " : ""}${predicate} — ${object} (mentioned ${mentionCount}× across ${sourceIds.length} sources).`;
+    const text = `Durable belief: ${holder ? `${holder} ` : ""}${predicate} — ${object} (mentioned ${mentionCount}× across ${sourceIds.length} sources).`;
     out.push({
       id: -beliefId, // negative sentinel; see fn docstring
       text,

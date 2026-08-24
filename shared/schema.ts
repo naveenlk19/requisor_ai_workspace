@@ -9,7 +9,6 @@ import {
   varchar,
   index,
   unique,
-  primaryKey,
   date,
   real,
 } from "drizzle-orm/pg-core";

@@ -1,8 +1,8 @@
 import { db } from "./db";
 import { aiTools } from "@shared/schema";
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Fix the csv-parse import
 import * as csvParse from 'csv-parse';
@@ -49,7 +49,7 @@ export async function seedAiTools() {
     // Transform the data for insertion
     const toolsToInsert = records.map((record: any) => {
       // Handle descriptions that might have been split across columns
-      let description = record['Description'] || '';
+      let description = record.Description || '';
       
       // Check for additional columns that might contain parts of the description
       // This handles cases where commas in the description caused it to be split
@@ -60,17 +60,17 @@ export async function seedAiTools() {
             !record[extraKey].startsWith('http') &&
             !record[extraKey].includes('$') &&
             !record[extraKey].includes('/month')) {
-          description += ' ' + record[extraKey];
+          description += ` ${record[extraKey]}`;
         }
       }
       
       return {
         name: record['Tool Name'] || '',
-        category: record['Category'] || '',
+        category: record.Category || '',
         description: description.trim(),
         freePlanAvailable: record['Free Plan Available'] === 'Yes',
         pricing: record['Pricing (Starting)'] || '',
-        website: record['Website'] || '',
+        website: record.Website || '',
         logoUrl: null, // No logos in the CSV, we'll need to add these later if needed
         useCase: null,
         idealFor: null

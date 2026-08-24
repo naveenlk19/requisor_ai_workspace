@@ -1,15 +1,16 @@
-import React, { useState, useMemo } from 'react';
+import type React from 'react';
+import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Task } from '@shared/schema';
+import type { Task } from '@shared/schema';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { Calendar, ChevronDown, MoreHorizontal, Search, SortAsc, SortDesc, Brain, Zap, GripVertical } from 'lucide-react';
+import { ChevronDown, MoreHorizontal, Search, SortAsc, SortDesc, Brain, Zap, GripVertical } from 'lucide-react';
 import { format, isToday, isTomorrow, isPast } from 'date-fns';
-import { getProjectTasks, updateTask, createSubtask } from '@/lib/api';
+import { getProjectTasks, updateTask, } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import {
@@ -264,7 +265,7 @@ export function TaskListEnhanced({ projectId, onTaskSelect, selectedTaskId }: Ta
   );
 
   const filteredAndSortedTasks = useMemo(() => {
-    let filtered = tasks.filter(task => {
+    const filtered = tasks.filter(task => {
       const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            task.description?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = filterStatus === 'all' || task.status === filterStatus;
@@ -282,11 +283,12 @@ export function TaskListEnhanced({ projectId, onTaskSelect, selectedTaskId }: Ta
           comparison = (priorityOrder[b.priority as keyof typeof priorityOrder] || 0) - 
                       (priorityOrder[a.priority as keyof typeof priorityOrder] || 0);
           break;
-        case 'dueDate':
+        case 'dueDate': {
           const aDate = a.dueDate ? new Date(a.dueDate).getTime() : 0;
           const bDate = b.dueDate ? new Date(b.dueDate).getTime() : 0;
           comparison = aDate - bDate;
           break;
+        }
         case 'status':
           comparison = (statusOrder[a.status as keyof typeof statusOrder] || 0) - 
                       (statusOrder[b.status as keyof typeof statusOrder] || 0);

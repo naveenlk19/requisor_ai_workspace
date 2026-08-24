@@ -1,9 +1,8 @@
 import OpenAI from "openai";
 import { storage } from "../storage";
 import { trackTokenUsage } from "./token-tracker";
-import {
+import type {
   InsertUserStory,
-  InsertStoryEstimation,
   UserStory,
   JiraIntegration,
   InsertJiraIntegration,
@@ -630,7 +629,7 @@ export class JiraService {
 
       // Add story points if available
       if (story.storyPoints) {
-        issueData.fields["customfield_10002"] = story.storyPoints; // Common story points field
+        issueData.fields.customfield_10002 = story.storyPoints; // Common story points field
       }
 
       const response = await fetch(`${integration.jiraUrl}/rest/api/3/issue`, {
@@ -706,7 +705,7 @@ export class JiraService {
       }
 
       const scoreText = response.choices[0].message.content?.trim() || "50";
-      const score = parseInt(scoreText.replace(/[^0-9]/g, ""));
+      const score = parseInt(scoreText.replace(/[^0-9]/g, ""), 10);
 
       return Math.max(10, Math.min(100, score || 50));
     } catch (error) {

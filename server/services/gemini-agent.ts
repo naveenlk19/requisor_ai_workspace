@@ -1,4 +1,4 @@
-import { GoogleGenAI, Tool, Schema } from "@google/genai";
+import { GoogleGenAI, } from "@google/genai";
 import { DatabaseStorage } from "../database-storage";
 import { logService } from "./log-service";
 import { socialMediaService } from "./social-media-service";
@@ -480,7 +480,7 @@ ${relevantMemories.map(m => `- ${m.content}`).join('\n')}
         let response;
         let attempt = 0;
         const MAX_RETRIES = 3;
-        let currentContents = [...contents];
+        const currentContents = [...contents];
 
         while (attempt < MAX_RETRIES) {
             attempt++;
@@ -527,7 +527,7 @@ ${relevantMemories.map(m => `- ${m.content}`).join('\n')}
         if (choice.finishReason === "RECITATION" || choice.finishReason === "SAFETY") {
             logService.log("NODE", "WARN", `Gemini finished with reason: ${choice.finishReason}`);
             return {
-                text: "I tried to perform an action but was stopped due to safety or recitation limits. (Error: " + choice.finishReason + ")"
+                text: `I tried to perform an action but was stopped due to safety or recitation limits. (Error: ${choice.finishReason})`
             };
         }
 
@@ -547,8 +547,8 @@ ${relevantMemories.map(m => `- ${m.content}`).join('\n')}
         const functionCalls = parts.filter((part: any) => part.functionCall);
         logService.log("NODE", "INFO", "functionCalls", functionCalls);
 
-        let newDrafts: any[] = [];
-        let draftUpdates: any[] = [];
+        const newDrafts: any[] = [];
+        const draftUpdates: any[] = [];
         let draftData: any = null; // Legacy support / single draft catch-all (kept for safety but we will iterate)
         let scheduledPostData: any = null;
         let imagePrompt: any = null;
@@ -597,7 +597,7 @@ ${relevantMemories.map(m => `- ${m.content}`).join('\n')}
                     });
 
                     if (result.success) {
-                        toolResultText += result.message + "\n";
+                        toolResultText += `${result.message}\n`;
                         if (result.posts && Array.isArray(result.posts)) {
                             result.posts.forEach((p: any) => {
                                 if (p.url) {
@@ -607,15 +607,15 @@ ${relevantMemories.map(m => `- ${m.content}`).join('\n')}
                         }
                         // Also append errors if any occurred during partial success
                         if (result.errors && result.errors.length > 0) {
-                            toolResultText += "\nHowever, some platforms failed:\n" + result.errors.join("\n") + "\n";
+                            toolResultText += `\nHowever, some platforms failed:\n${result.errors.join("\n")}\n`;
                         }
                     } else if (result.error) {
-                        toolResultText += "Error: " + result.error + "\n";
+                        toolResultText += `Error: ${result.error}\n`;
                     } else if (result.errors) {
-                        toolResultText += "Errors:\n" + result.errors.join("\n") + "\n";
+                        toolResultText += `Errors:\n${result.errors.join("\n")}\n`;
                     }
 
-                    logService.log("NODE", "INFO", "Tool Result for " + functionName, result);
+                    logService.log("NODE", "INFO", `Tool Result for ${functionName}`, result);
                 }
             }
             logService.log(
@@ -692,7 +692,7 @@ ${relevantMemories.map(m => `- ${m.content}`).join('\n')}
                         // Try to extract the index suffix if possible 
                         const parts = match.split('_');
                         if (parts.length >= 3) {
-                            const idx = parseInt(parts[2]);
+                            const idx = parseInt(parts[2], 10);
                             if (!isNaN(idx)) return `Draft ${idx + 1}`;
                         }
                         return "Draft";
@@ -705,7 +705,7 @@ ${relevantMemories.map(m => `- ${m.content}`).join('\n')}
 
             // Save the final assistant response
             if (sessionId) {
-                let metadata: any = {};
+                const metadata: any = {};
 
                 // If we generated drafts, save them to metadata so we can recall them later
                 if (Array.isArray(draftData)) {
@@ -715,7 +715,7 @@ ${relevantMemories.map(m => `- ${m.content}`).join('\n')}
                         draftMap[`Draft ${i + 1}`] = {
                             id: d.id,
                             topic: d.topic,
-                            contentSnippet: d.content.substring(0, 50) + "..."
+                            contentSnippet: `${d.content.substring(0, 50)}...`
                         };
                     });
                     metadata.actions = { generatedDrafts: draftMap };
@@ -941,7 +941,7 @@ export async function processBuildModePrompt(
         const openai = new OpenAI({ apiKey: openaiKey });
 
         const contextNote = context
-            ? "\n\n[User-provided context (transcripts, notes, files):]\n" + context
+            ? `\n\n[User-provided context (transcripts, notes, files):]\n${context}`
             : "";
 
         const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
@@ -987,7 +987,7 @@ export async function processBuildModePrompt(
 
         return { text: responseText, features };
     } catch (error: any) {
-        logService.log("NODE", "ERROR", "[Build Mode] Error: " + error.message);
+        logService.log("NODE", "ERROR", `[Build Mode] Error: ${error.message}`);
         return {
             text: "I encountered an error processing your request. Please try again.",
         };
@@ -1015,7 +1015,7 @@ export async function generateTitle(userPrompt: string, modelResponse: string): 
         logService.log("NODE", "ERROR", "Failed to generate title", error);
 
         // Fallback: Use first few words of user prompt
-        const fallbackTitle = userPrompt.split(' ').slice(0, 5).join(' ') + "...";
+        const fallbackTitle = `${userPrompt.split(' ').slice(0, 5).join(' ')}...`;
         return fallbackTitle;
     }
 }

@@ -1,6 +1,5 @@
 import { db } from "./db";
-import { users, projects, tasks, insights, integrations, subscriptionPlans, features, conversations } from "@shared/schema";
-import { MemStorage } from "./storage";
+import { users, projects, tasks, insights, integrations, subscriptionPlans, conversations } from "@shared/schema";
 import { seedAiTools } from "./ai-tools-seed";
 import * as bcrypt from "bcryptjs";
 

@@ -29,7 +29,7 @@ router.get('/all', (req, res) => {
 // Get recent logs (default 100, max 1000)
 router.get('/recent', (req, res) => {
   try {
-    const count = Math.min(parseInt(req.query.count as string) || 100, 1000);
+    const count = Math.min(parseInt(req.query.count as string, 10) || 100, 1000);
     const logs = logService.getRecentLogs(count);
     res.json({
       success: true,
@@ -282,7 +282,7 @@ router.get('/stream', (req, res) => {
   try {
     const service = req.query.service as string;
     const level = req.query.level as string;
-    const count = Math.min(parseInt(req.query.count as string) || 100, 1000);
+    const count = Math.min(parseInt(req.query.count as string, 10) || 100, 1000);
     
     let logs = logService.getRecentLogs(count);
     

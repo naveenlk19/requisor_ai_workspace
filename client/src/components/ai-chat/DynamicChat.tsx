@@ -3,13 +3,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDropzone, type FileRejection } from "react-dropzone";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
 import {
   Send,
   Sparkles,
-  User,
   CheckCircle,
   Loader2,
   Play,
@@ -23,7 +20,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ChatMessage, ChatAction } from "@shared/ai-types";
+import type { ChatMessage, ChatAction } from "@shared/ai-types";
 import { format } from "date-fns";
 import { PromptRefinerDialog } from "@/components/ai-chat/PromptRefinerDialog";
 import { MessageFeedback } from "@/components/ai-chat/MessageFeedback";

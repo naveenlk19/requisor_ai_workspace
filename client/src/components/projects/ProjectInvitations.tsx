@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getProjectInvitations,
@@ -44,9 +44,9 @@ import {
 } from "@/components/ui/table";
 import {
   ProjectRole,
-  ProjectInvitation as ProjectInvitationType,
+  type ProjectInvitation as ProjectInvitationType,
 } from "@shared/schema";
-import { Mail, Plus, Trash2, Clock } from "lucide-react";
+import { Mail, Trash2, Clock } from "lucide-react";
 
 interface ProjectInvitationsProps {
   projectId: number;

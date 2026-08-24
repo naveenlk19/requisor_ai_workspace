@@ -5,7 +5,6 @@ import type {
   Project,
   Task,
   User,
-  InsertProject,
   InsertTask,
 } from "@shared/schema";
 
@@ -241,7 +240,7 @@ export class SimpleAIAgent {
             );
 
             if (result.content) {
-              content += "\n\n" + result.content;
+              content += `\n\n${result.content}`;
             }
 
             if (result.actions) {
@@ -373,13 +372,13 @@ export class SimpleAIAgent {
     const words = message.split(" ").filter((word) => word.length > 2);
     if (words.length > 0) {
       return (
-        words
+        `${words
           .slice(0, 3)
           .map(
             (word) =>
               word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
           )
-          .join(" ") + " Project"
+          .join(" ")} Project`
       );
     }
     return "New Project";

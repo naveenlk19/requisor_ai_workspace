@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import Confetti from 'react-confetti';
 
 interface ConfettiComponentProps {

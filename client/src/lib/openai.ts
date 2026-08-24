@@ -1,5 +1,5 @@
 import { apiRequest } from "./queryClient";
-import { AIProjectPlan } from "@/types";
+import type { AIProjectPlan } from "@/types";
 
 // Function to generate a project plan from an idea
 export async function generateProjectPlan(idea: string): Promise<AIProjectPlan> {

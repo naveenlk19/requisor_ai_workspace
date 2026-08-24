@@ -3,8 +3,6 @@ import multer from "multer";
 import { twitterOAuth } from "../services/twitter-oauth";
 import { nanoid } from "nanoid";
 import { logger } from "../services/logger";
-import { isAuthenticated } from "../auth";
-import { config } from "../config/environment";
 import { DatabaseStorage } from "../database-storage";
 
 const storage = new DatabaseStorage();
@@ -90,7 +88,7 @@ router.get("/twitter/callback", async (req: any, res) => {
       hasCode: !!code,
       hasCodeVerifier: !!codeVerifier,
       hasStoredRedirectUri: !!storedRedirectUri,
-      state: state ? String(state).substring(0, 8) + "..." : "none",
+      state: state ? `${String(state).substring(0, 8)}...` : "none",
     });
 
     if (error) {
@@ -188,7 +186,7 @@ router.get("/twitter/callback", async (req: any, res) => {
         await storage.createSocialMediaAccount({
           userId,
           platform: "twitter",
-          accountId: userData?.data?.id || "twitter_" + Date.now(),
+          accountId: userData?.data?.id || `twitter_${Date.now()}`,
           accountName: username,
           accessToken: tokenData.access_token,
           refreshToken: tokenData.refresh_token || null,
@@ -380,7 +378,7 @@ router.post(
       const TWITTER_CHAR_LIMIT = 280;
       const text =
         content.length > TWITTER_CHAR_LIMIT
-          ? content.slice(0, TWITTER_CHAR_LIMIT - 3) + "..."
+          ? `${content.slice(0, TWITTER_CHAR_LIMIT - 3)}...`
           : content;
 
       // Upload media if provided
@@ -494,7 +492,7 @@ router.post(
 
       res.status(500).json({
         success: false,
-        error: "Failed to publish to Twitter: " + error.message,
+        error: `Failed to publish to Twitter: ${error.message}`,
       });
     }
   },

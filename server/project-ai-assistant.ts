@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { trackTokenUsage } from "./services/token-tracker";
-import { Task, InsertTask } from "@shared/schema";
-import { IStorage } from "./storage";
+import type { Task, InsertTask } from "@shared/schema";
+import type { IStorage } from "./storage";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",

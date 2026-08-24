@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Save,
   Calendar,
@@ -13,7 +11,6 @@ import {
   Plus,
   Trash2,
   CheckCircle,
-  AlertCircle,
 } from "lucide-react";
 import {
   Select,
@@ -22,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { format, addDays, addWeeks, startOfDay, isAfter, parseISO, isValid } from "date-fns";
+import { format, addDays, addWeeks, startOfDay, parseISO, isValid } from "date-fns";
 import { v4 as uuidv4 } from "uuid";
 
 function safeFmt(dateStr: string | null | undefined, fmt: string, fallback: string = "No date"): string {

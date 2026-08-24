@@ -1,5 +1,5 @@
 import { CardSkeleton } from '@/components/ui/skeleton';
-import { ProjectMetrics as ProjectMetricsType } from '@/types';
+import type { ProjectMetrics as ProjectMetricsType } from '@/types';
 import {
   ListTodo,
   CheckCircle,

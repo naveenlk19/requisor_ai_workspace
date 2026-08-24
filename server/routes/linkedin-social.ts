@@ -1,8 +1,7 @@
 import { Router } from "express";
 import { DatabaseStorage } from "../database-storage";
 import multer from "multer";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import { isAuthenticated } from "../auth";
@@ -148,7 +147,7 @@ router.post(
             const postUrl = "https://api.linkedin.com/v2/ugcPosts";
 
             let shareMediaCategory = "NONE";
-            let media = [];
+            const media = [];
 
             if (assetUrn) {
                 shareMediaCategory = "IMAGE";

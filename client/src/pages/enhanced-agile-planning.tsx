@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EnhancedAgileCanvas } from "@/components/agile-planning/EnhancedAgileCanvas";
 import { EnhancedPlannerChat } from "@/components/agile-planning/EnhancedPlannerChat";

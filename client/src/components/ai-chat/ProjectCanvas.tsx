@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle2, Circle, Clock } from 'lucide-react';
+import { Calendar, Circle, Clock } from 'lucide-react';
 import { safeFormatDate } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -266,7 +266,7 @@ export function ProjectCanvas({ projectData: initialData, onSave, className = ''
                             <input
                               type="number"
                               value={task.estimatedHours}
-                              onChange={(e) => updateTask(milestone.id, task.id, 'estimatedHours', parseInt(e.target.value))}
+                              onChange={(e) => updateTask(milestone.id, task.id, 'estimatedHours', parseInt(e.target.value, 10))}
                               className="border rounded px-1 w-12"
                               min="1"
                             />

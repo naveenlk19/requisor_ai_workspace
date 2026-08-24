@@ -3,7 +3,6 @@ import multer from "multer";
 import { instagramOAuth } from "../services/instagram-oauth";
 import { logger } from "../services/logger";
 import { isAuthenticated } from "../auth";
-import { config } from "../config/environment";
 import { storage } from "../storage";
 
 // Configure multer for file uploads
@@ -178,7 +177,7 @@ router.get("/instagram/callback", async (req: any, res) => {
     });
 
     res.redirect(
-      `/social-media-agent?error=${encodeURIComponent("Instagram authentication failed: " + error.message)}`,
+      `/social-media-agent?error=${encodeURIComponent(`Instagram authentication failed: ${error.message}`)}`,
     );
   }
 });
@@ -290,7 +289,7 @@ router.post("/instagram/publish", upload.single("media"), async (req: any, res) 
     logger.error("backend", "Instagram publish failed", { error });
     res.status(500).json({
       success: false,
-      error: "Failed to publish to Instagram: " + error.message,
+      error: `Failed to publish to Instagram: ${error.message}`,
     });
   }
 });

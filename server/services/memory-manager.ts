@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { db } from "../db";
 import { chatEmbeddings } from "@shared/schema";
-import { cosineDistance, desc, gt, sql } from "drizzle-orm";
+import { desc, gt, sql } from "drizzle-orm";
 
 // Initialize Gemini client (lightweight usage for embeddings)
 const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });

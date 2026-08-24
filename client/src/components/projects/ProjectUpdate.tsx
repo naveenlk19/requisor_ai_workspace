@@ -1,9 +1,9 @@
-import React from "react";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
-import { Project, insertProjectSchema } from "@shared/schema";
+import { type Project, insertProjectSchema } from "@shared/schema";
 import { updateProject } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import {

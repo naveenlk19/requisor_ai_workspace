@@ -188,7 +188,7 @@ export function detectStartDateChangeIntent(message: string): StartDateChangeInt
   const preserveEndDate = preserveEndDatePatterns.some(p => lowerMessage.includes(p));
   const preserveDuration = preserveDurationPatterns.some(p => lowerMessage.includes(p));
 
-  const datePattern = /(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})|(\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2})|(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+\d{1,2}|\d{1,2}\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*/i;
+  const datePattern = /(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})|(\d{4}[/-]\d{1,2}[/-]\d{1,2})|(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+\d{1,2}|\d{1,2}\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*/i;
   const dateMatch = message.match(datePattern);
 
   return {

@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { Task, TeamMember } from "@shared/schema";
+import type { Task, TeamMember } from "@shared/schema";
 import { trackTokenUsage } from "./token-tracker";
 
 const openai = new OpenAI({

@@ -23,7 +23,6 @@ import { performFeatureCandidateMerge } from "../services/feature-candidate-merg
 import {
   featureCandidates,
   users,
-  type FeatureCandidate,
   type InsertFeatureCandidate,
   type InsertUser,
 } from "@shared/schema";

@@ -39,7 +39,7 @@ function specificityScore(task: Task): number {
   let score = 0;
   const name = task.name?.toLowerCase() || "";
   const description = task.description?.toLowerCase() || "";
-  const combined = name + " " + description;
+  const combined = `${name} ${description}`;
 
   // 1. Length check (longer = more context) - max 0.25
   const wordCount = combined.split(/\s+/).filter((w) => w.length > 2).length;
@@ -192,7 +192,7 @@ function ensureDoD(task: Task): Task {
 
   if (!hasDoD && description) {
     // Generate context-aware DoD based on task content
-    const combined = (taskName + " " + description).toLowerCase();
+    const combined = (`${taskName} ${description}`).toLowerCase();
     let specificDoD = "";
 
     // Match common patterns and generate relevant DoD
@@ -722,7 +722,7 @@ GOAL: Create a plan so specific that anyone can understand EXACTLY what needs to
 
     return {
       name: "New Project",
-      description: "Project generated from: " + prompt,
+      description: `Project generated from: ${prompt}`,
       startDate: today.toISOString().split("T")[0],
       endDate: endDate.toISOString().split("T")[0],
       milestones: [

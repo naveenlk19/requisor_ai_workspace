@@ -1,12 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { 
   Users, 
   Brain, 
@@ -18,24 +16,18 @@ import {
   Calendar, 
   BarChart3,
   Filter,
-  Plus,
   Zap,
   Target,
   ArrowRight,
-  Settings,
   TrendingUp,
   Activity,
   Lightbulb,
   Timer,
   UserCheck,
-  Shuffle,
-  PlayCircle,
   PieChart,
-  Search,
   Eye,
   Edit3,
   Coffee,
-  Briefcase
 } from 'lucide-react';
 
 interface TeamMember {

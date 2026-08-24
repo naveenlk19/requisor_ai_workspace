@@ -1,10 +1,8 @@
 import { storage } from "../database-storage";
 import { config } from "../config/environment";
-import { logService } from "./log-service";
-import { twitterOAuth } from "./twitter-oauth";
 import { socialMediaService } from "./social-media-service";
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import mime from "mime-types";
 import FormData from "form-data";
 import axios from "axios";
@@ -125,7 +123,7 @@ export async function executeScheduledPost(scheduledPost: any) {
             // Mastodon publishing logic
             const truncatedContent =
                 generatedContent.length > 500
-                    ? generatedContent.substring(0, 497) + "..."
+                    ? `${generatedContent.substring(0, 497)}...`
                     : generatedContent;
 
             const instanceUrl =
@@ -134,7 +132,7 @@ export async function executeScheduledPost(scheduledPost: any) {
                     : `https://${postToExecute.credentials.mastodon_instance}`;
 
             // Handle media attachments if any
-            let mediaIds: string[] = [];
+            const mediaIds: string[] = [];
             const mediaUrls = Array.isArray(postToExecute.mediaUrls)
                 ? postToExecute.mediaUrls
                 : [];

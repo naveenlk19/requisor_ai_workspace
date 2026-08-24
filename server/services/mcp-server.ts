@@ -12,7 +12,7 @@
 // scopes all storage/retrieval calls to that user. The server is strictly
 // read-only.
 
-import * as crypto from "crypto";
+import * as crypto from "node:crypto";
 import type { Request, Response, NextFunction } from "express";
 import { storage } from "../storage";
 import { retrieveContext } from "./retrieval";
@@ -50,7 +50,7 @@ export function tokenDisplayPrefix(plain: string): string {
 }
 
 function extractBearerToken(req: Request): string | null {
-  const header = req.headers["authorization"];
+  const header = req.headers.authorization;
   if (typeof header === "string" && header.length > 0) {
     const m = header.match(/^Bearer\s+(.+)$/i);
     if (m) return m[1].trim();

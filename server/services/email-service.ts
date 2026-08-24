@@ -3,10 +3,10 @@ import {
   SendSmtpEmail,
   TransactionalEmailsApiApiKeys,
 } from "@getbrevo/brevo";
-import { ProjectInvitation, Project, User } from "@shared/schema";
+import type { ProjectInvitation, Project, User } from "@shared/schema";
 
 // Initialize Brevo TransactionalEmailsApi
-let emailAPI = new TransactionalEmailsApi();
+const emailAPI = new TransactionalEmailsApi();
 
 // Set up API key if available
 if (process.env.BREVO_API_KEY) {
@@ -54,7 +54,7 @@ export async function sendEmail(params: EmailParams): Promise<boolean> {
 
     // Parse email addresses for Brevo format
     const parseEmail = (email: string): { name?: string; email: string } => {
-      const emailPattern = new RegExp("^(.+?)\\s*<(.+)>$");
+      const emailPattern = /^(.+?)\s*<(.+)>$/;
       const match = emailPattern.exec(email);
       if (match && match[1] && match[2]) {
         return {
@@ -69,7 +69,7 @@ export async function sendEmail(params: EmailParams): Promise<boolean> {
     const toEmail = parseEmail(params.to);
 
     // Create the email object for Brevo
-    let message = new SendSmtpEmail();
+    const message = new SendSmtpEmail();
     message.subject = params.subject;
     message.sender = fromEmail;
     message.to = [toEmail];

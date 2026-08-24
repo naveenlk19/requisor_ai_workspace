@@ -1,32 +1,10 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useInView, useReducedMotion } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, useInView, } from "framer-motion";
 
 import PartnerSlider from "@/components/site/PartnerSlider";
 import {
-  ArrowRight,
   Play,
-  Menu,
-  X,
-  Check,
-  Upload,
-  MessageSquare,
-  Code,
   Star,
-  Send,
-  Zap,
-  Target,
-  Video,
-  Mic,
-  Brain,
-  FileText,
-  BarChart3,
-  Layers,
-  ChevronRight,
-  Quote,
-  Database,
-  Network,
-  ScanLine,
-  Rocket,
 } from "lucide-react";
 import davidVideo from "@/assets/testimonials/david-video.mp4";
 import davidImg from "@/assets/testimonials/david.jpeg";

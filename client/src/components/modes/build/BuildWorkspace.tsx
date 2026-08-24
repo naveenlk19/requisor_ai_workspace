@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,7 +10,6 @@ import {
   Lightbulb,
   Search,
   Sparkles,
-  ExternalLink,
   History,
   X,
 } from "lucide-react";

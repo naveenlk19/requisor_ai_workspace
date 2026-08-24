@@ -8,7 +8,7 @@
 // In-memory LRU keyed on sha256(query + sortedCandidateIds) caps re-paying
 // the API when the user retries the same prompt within the cache window.
 
-import crypto from "crypto";
+import crypto from "node:crypto";
 
 const COHERE_URL = "https://api.cohere.com/v2/rerank";
 const COHERE_MODEL = process.env.COHERE_RERANK_MODEL || "rerank-english-v3.0";
