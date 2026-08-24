@@ -10,7 +10,9 @@ services:
   - type: web
     name: requisor-staging
     runtime: docker
-    branch: main
+    # Tracking `migration` during the initial migration effort; switch back to
+    # `main` once the PR flow (migration → main → staging) is established.
+    branch: migration
     autoDeploy: true
     plan: starter
     healthCheckPath: /api/health

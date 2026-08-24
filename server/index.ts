@@ -1,3 +1,4 @@
+import { Sentry } from "./instrument"; // must stay the FIRST import
 import express, { type Request, Response, NextFunction } from "express";
 import multer from "multer";
 import { registerRoutes } from "./routes";
@@ -416,6 +417,12 @@ process.on('SIGINT', () => {
 });
 
 // Global error handler
+// Report unhandled route errors to Sentry (no-op without SENTRY_DSN),
+// then respond via the global handler below.
+if (process.env.SENTRY_DSN) {
+  Sentry.setupExpressErrorHandler(app);
+}
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error("Global error handler:", err);
   res.status(500).json({
