@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Pre-commit: lint STAGED files with Biome, auto-fix what's safely fixable,
+# re-stage the fixes, and block the commit only if unfixable ERRORS remain
+# (warnings — the known noExplicitAny backlog — never block).
+#
+# Skip in an emergency with: git commit --no-verify
+#
+# Limitation: after auto-fixing, the whole file is re-staged — if you use
+# partial staging (git add -p), unstaged hunks in fixed files get staged too.
+set -uo pipefail
+
+# Staged source files (Added/Copied/Modified/Renamed), null-safe for spaces
+STAGED=$(git diff --cached --name-only --diff-filter=ACMR -- '*.ts' '*.tsx' '*.js' '*.jsx')
+[ -z "$STAGED" ] && exit 0
+
+# 1) Auto-fix safe issues in staged files and re-stage them
+echo "$STAGED" | tr '\n' '\0' | xargs -0 npx biome lint --write --no-errors-on-unmatched >/dev/null 2>&1
+echo "$STAGED" | tr '\n' '\0' | xargs -0 git add --
+
+# 2) Block on remaining errors (biome exits non-zero on errors, not warnings)
+if ! echo "$STAGED" | tr '\n' '\0' | xargs -0 npx biome lint --no-errors-on-unmatched --max-diagnostics=50; then
+  echo ""
+  echo "✖ Commit blocked: Biome errors in staged files (see above)."
+  echo "  Fix them, or bypass once with: git commit --no-verify"
+  exit 1
+fi
+exit 0
