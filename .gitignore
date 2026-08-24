@@ -3,6 +3,9 @@ node_modules/
 
 # Build output
 dist/
+# ...but vendored packages ship their own dist — those must be committed
+!vendor/**/dist/
+!vendor/**/dist/**
 *.tsbuildinfo
 
 # Environment & secrets — never commit
