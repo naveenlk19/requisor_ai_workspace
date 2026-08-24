@@ -41,7 +41,7 @@ jobs:
       # (never raise it). Flip to a plain `npm run check` gate at baseline 0.
       - name: Typecheck (no new errors beyond baseline)
         run: |
-          BASELINE=1064
+          BASELINE=631
           COUNT=$(npx tsc --noEmit 2>&1 | grep -cE "error TS" || true)
           echo "tsc errors: $COUNT (baseline: $BASELINE)"
           if [ "$COUNT" -gt "$BASELINE" ]; then
