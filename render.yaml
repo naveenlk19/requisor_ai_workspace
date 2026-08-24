@@ -1,0 +1,48 @@
+# Render Blueprint — two environments from this repo:
+#   staging tracks `main`, prod tracks `prod`.
+# Releasing to prod = fast-forward merging main into prod:
+#   git checkout prod && git merge --ff-only main && git push
+# Before first deploy, on EACH database run: CREATE EXTENSION IF NOT EXISTS vector;
+# Fill the env groups (requisor-staging-env / requisor-prod-env) in the Render
+# dashboard using .env.example as the checklist.
+
+services:
+  - type: web
+    name: requisor-staging
+    runtime: docker
+    branch: main
+    autoDeploy: true
+    plan: starter
+    healthCheckPath: /api/health
+    preDeployCommand: npx drizzle-kit push --force
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: requisor-db-staging
+          property: connectionString
+      - key: CRON_ENABLED
+        value: "false"
+      - fromGroup: requisor-staging-env
+
+  - type: web
+    name: requisor-prod
+    runtime: docker
+    branch: prod
+    autoDeploy: true
+    plan: standard
+    healthCheckPath: /api/health
+    preDeployCommand: npx drizzle-kit push --force
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: requisor-db-prod
+          property: connectionString
+      - key: CRON_ENABLED
+        value: "true"
+      - fromGroup: requisor-prod-env
+
+databases:
+  - name: requisor-db-staging
+    plan: basic-256mb
+  - name: requisor-db-prod
+    plan: basic-1gb

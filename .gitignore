@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Environment & secrets — never commit
+.env
+.env.*
+!.env.example
+cookies.txt
+*.pem
+
+# Database dumps — never commit (contain user data)
+*.sql
+*.dump
+
+# Runtime data
+uploads/
+logs/
+*.log
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Local tooling output
+.claude/
+graphify-out/
+
+# Python leftovers (not deployed)
+__pycache__/
+*.pyc
+
+# Replit artifacts
+.replit
+replit.nix
+.config/
+.local/
+.cache/
+render.md
