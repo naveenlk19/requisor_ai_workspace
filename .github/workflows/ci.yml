@@ -1,0 +1,126 @@
+# ──────────────────────────────────────────────────────────
+# CI — runs on every PR to main/staging (and pushes to the
+# active branches). No registry pushes — build/verify only.
+#
+# Gating philosophy (borrowed from a sister project's CI):
+# a check is either a hard gate verified clean, or explicitly
+# non-gating with a written reason and a flip condition.
+# ──────────────────────────────────────────────────────────
+name: ci
+
+on:
+  pull_request:
+    branches: [main, staging]
+  push:
+    branches: [main, staging, migration]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Typecheck (ratchet) + Build ───────────────────────────
+  build:
+    name: "Typecheck ratchet & Build"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20 # matches the Dockerfile runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The codebase inherits ~1064 pre-existing tsc errors from upstream.
+      # A hard gate would block every PR, so this is a RATCHET: it fails only
+      # if a change ADDS errors. Lower the baseline as errors get fixed
+      # (never raise it). Flip to a plain `npm run check` gate at baseline 0.
+      - name: Typecheck (no new errors beyond baseline)
+        run: |
+          BASELINE=631
+          COUNT=$(npx tsc --noEmit 2>&1 | grep -cE "error TS" || true)
+          echo "tsc errors: $COUNT (baseline: $BASELINE)"
+          if [ "$COUNT" -gt "$BASELINE" ]; then
+            echo "::error::Type errors increased from $BASELINE to $COUNT — fix the new ones."
+            npx tsc --noEmit 2>&1 | grep -E "error TS" | tail -30
+            exit 1
+          fi
+
+      # Hard gate — verified green on the migration branch.
+      - name: Build (client + server bundle)
+        run: npm run build
+
+  # ── Server tests against real Postgres + pgvector ─────────
+  tests:
+    name: "Server tests (Postgres)"
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: requisor
+          POSTGRES_PASSWORD: ci_test_password
+          POSTGRES_DB: requisor_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: "postgresql://requisor:ci_test_password@localhost:5432/requisor_test?sslmode=disable"
+      SESSION_SECRET: "ci-test-secret-not-for-production"
+      # Dummy keys so SDK clients constructed at import time don't throw;
+      # the tests themselves don't call external APIs.
+      OPENAI_API_KEY: "ci-dummy"
+      ANTHROPIC_API_KEY: "ci-dummy"
+      GEMINI_API_KEY: "ci-dummy"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Enable pgvector
+        run: PGPASSWORD=ci_test_password psql -h localhost -U requisor -d requisor_test -c "CREATE EXTENSION IF NOT EXISTS vector;"
+
+      - name: Create schema
+        run: npx drizzle-kit push --force
+
+      - name: Run server tests
+        run: npm test
+        # Non-gating, deliberately: all 5 suites pass locally against a
+        # dev database that was schema'd + seeded over time; this is their
+        # first run on a pristine drizzle-pushed DB in CI. Flip this to a
+        # hard gate (delete these two lines) after the first green run here.
+        continue-on-error: true
+
+  # ── Docker build test (no push) ───────────────────────────
+  docker-build:
+    name: "Docker — Build Test"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: requisor:ci-test

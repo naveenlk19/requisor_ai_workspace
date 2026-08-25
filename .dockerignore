@@ -1,0 +1,16 @@
+node_modules
+dist
+.git
+.env
+.env.*
+uploads
+logs
+*.sql
+*.dump
+.DS_Store
+docs
+render.md
+runlocal.md
+replit.md
+README.md
+DEVELOPER_DOCUMENTATION.md

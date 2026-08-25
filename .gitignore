@@ -1,0 +1,48 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+# ...but vendored packages ship their own dist — those must be committed
+!vendor/**/dist/
+!vendor/**/dist/**
+*.tsbuildinfo
+
+# Environment & secrets — never commit
+.env
+.env.*
+!.env.example
+cookies.txt
+*.pem
+
+# Database dumps — never commit (contain user data)
+*.sql
+*.dump
+# ...but schema migrations are code, not dumps — those must be committed
+!migrations/**/*.sql
+
+# Runtime data
+uploads/
+logs/
+*.log
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Local tooling output
+.claude/
+graphify-out/
+
+# Python leftovers (not deployed)
+__pycache__/
+*.pyc
+
+# Replit artifacts
+.replit
+replit.nix
+.config/
+.local/
+.cache/
+render.md

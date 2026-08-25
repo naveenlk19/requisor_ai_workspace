@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /uploads/
+Disallow: /media/
+
+# Authenticated app routes (/auth, /dashboard, /admin, /brain, etc.)
+# are not blocked here so crawlers can render the landing without a
+# robots-txt conflict. They are still kept out of the index via the
+# `X-Robots-Tag: noindex` response header set by the server.
+
+Sitemap: https://beta.requisor.io/sitemap.xml

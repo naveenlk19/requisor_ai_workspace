@@ -1,0 +1,30 @@
+{
+  "name": "jspdf",
+  "version": "3.0.4",
+  "description": "PDF Document creation from JavaScript",
+  "main": "dist/jspdf.node.min.js",
+  "module": "dist/jspdf.es.min.js",
+  "types": "types/index.d.ts",
+  "typings": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "node": "./dist/jspdf.node.min.js",
+      "browser": "./dist/jspdf.es.min.js",
+      "types": "./types/index.d.ts"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.28.4",
+    "fflate": "^0.8.1",
+    "fast-png": "^6.2.0"
+  },
+  "optionalDependencies": {
+    "canvg": "^3.0.11",
+    "core-js": "^3.6.0",
+    "dompurify": "^3.2.4",
+    "html2canvas": "^1.0.0-rc.5"
+  },
+  "license": "MIT"
+}
