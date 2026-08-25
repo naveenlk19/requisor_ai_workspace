@@ -4,16 +4,18 @@ if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL, ensure the database is provisioned");
 }
 
-// Same TLS handling as server/db.ts: an sslmode= in the URL overrides the
-// explicit ssl option in node-postgres, and sslmode=require re-enables strict
-// verification, which fails on providers with self-signed certs (Render).
-// Strip it and let the explicit ssl option below be the single source of truth.
+// TLS handling, same intent as server/db.ts but via the URL: drizzle-kit
+// ignores a separate `ssl` field when `url` is set, so the only reliable
+// channel is the sslmode= query param. sslmode=no-verify gives TLS without
+// cert verification (Render uses self-signed certs); sslmode=disable is
+// honored for local Postgres. Any other sslmode is normalized to no-verify.
 const databaseUrl = process.env.DATABASE_URL;
 const [baseUrl, queryString] = databaseUrl.split("?");
 const params = (queryString ?? "").split("&").filter(Boolean);
 const sslDisabled = params.some((p) => p === "sslmode=disable");
 const keptParams = params.filter((p) => !p.startsWith("sslmode="));
-const cleanUrl = keptParams.length ? `${baseUrl}?${keptParams.join("&")}` : baseUrl;
+keptParams.push(sslDisabled ? "sslmode=disable" : "sslmode=no-verify");
+const cleanUrl = `${baseUrl}?${keptParams.join("&")}`;
 
 export default defineConfig({
   out: "./migrations",
@@ -21,6 +23,5 @@ export default defineConfig({
   dialect: "postgresql",
   dbCredentials: {
     url: cleanUrl,
-    ssl: sslDisabled ? false : { rejectUnauthorized: false },
   },
 });

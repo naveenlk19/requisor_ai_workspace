@@ -18,6 +18,8 @@ cookies.txt
 # Database dumps — never commit (contain user data)
 *.sql
 *.dump
+# ...but schema migrations are code, not dumps — those must be committed
+!migrations/**/*.sql
 
 # Runtime data
 uploads/

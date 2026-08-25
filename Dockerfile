@@ -22,6 +22,8 @@ RUN npm ci --omit=dev --no-audit --no-fund
 COPY --from=build /app/dist ./dist
 COPY drizzle.config.ts ./
 COPY shared ./shared
+# Render's preDeployCommand (npx drizzle-kit migrate) runs in this image
+COPY migrations ./migrations
 # ai-tools-seed.ts reads its CSV from ../attached_assets at boot
 COPY attached_assets ./attached_assets
 EXPOSE 8080

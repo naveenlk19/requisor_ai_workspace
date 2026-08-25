@@ -11,6 +11,8 @@
     "lint": "biome lint .",
     "test": "bash scripts/run-tests.sh",
     "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
   },
   "dependencies": {
