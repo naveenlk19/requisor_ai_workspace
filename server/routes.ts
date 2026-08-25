@@ -2296,12 +2296,14 @@ export async function registerRoutes(app: Express): Promise<void> {
             profileImageUrl: req.user.claims.profile_image_url,
           });
           console.log(`Created/updated user: ${createdUser.username}`);
-          return res.json(createdUser);
+          const { password: _cp, ...createdResponse } = createdUser as any;
+          return res.json(createdResponse);
         }
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.json(user);
+      const { password: _p, ...userResponse } = user as any;
+      res.json(userResponse);
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
@@ -2555,21 +2557,6 @@ export async function registerRoutes(app: Express): Promise<void> {
         return res.status(401).json({ message: "Invalid email or password" });
       }
 
-      // Create Passport.js compatible session object
-      const expiresIn24Hours = Math.floor(Date.now() / 1000) + 24 * 60 * 60; // 24 hours from now
-      const sessionUser = {
-        dbUserId: user.id,
-        claims: {
-          sub: user.id,
-          email: user.email,
-          username: user.username,
-          first_name: user.firstName,
-          last_name: user.lastName,
-        },
-        expires_at: expiresIn24Hours,
-        refresh_token: null, // Custom auth doesn't use refresh tokens
-      };
-
       if (!user.emailVerified) {
         return res.status(403).json({
           code: "EMAIL_NOT_VERIFIED",
@@ -2578,8 +2565,10 @@ export async function registerRoutes(app: Express): Promise<void> {
         });
       }
 
-      // Use Passport.js login to establish proper session
-      req.login(sessionUser, (err) => {
+      // Pass the DB user itself: serializeUser stores user.id, and the
+      // isAuthenticated middleware rebuilds the normalized shape from it.
+      // (A claims-style object here has no .id and makes req.login 500.)
+      req.login(user, (err) => {
         if (err) {
           console.error("Passport login error during login:", err);
           return res.status(500).json({ message: "Session creation failed" });
@@ -2638,22 +2627,8 @@ export async function registerRoutes(app: Express): Promise<void> {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Log them in automatically after verification
-      const expiresIn24Hours = Math.floor(Date.now() / 1000) + 24 * 60 * 60;
-      const sessionUser = {
-        dbUserId: user.id,
-        claims: {
-          sub: user.id,
-          email: user.email,
-          username: user.username,
-          first_name: user.firstName,
-          last_name: user.lastName,
-        },
-        expires_at: expiresIn24Hours,
-        refresh_token: null,
-      };
-
-      req.login(sessionUser, (err) => {
+      // Log them in automatically after verification (DB user: see login route)
+      req.login(user, (err) => {
         if (err) {
           console.error("Passport login error after verification:", err);
           // Still return success even if session creation fails
@@ -13743,12 +13718,9 @@ Respond with actionable insights and specific recommendations. Include assignmen
       const user = await storage.getUser(rec.user_id);
       if (!user) return res.status(404).json({ message: "User not found" });
 
-      // create a session (so frontend can jump to home)
+      // create a session (so frontend can jump to home; DB user: see login route)
       req.login(
-        {
-          dbUserId: user.id,
-          claims: { sub: user.id, email: user.email, username: user.username },
-        },
+        user,
         (err: any) => {
           if (err) {
             console.warn("verify-email login error:", err);
